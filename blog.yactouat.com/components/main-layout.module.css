@@ -1,0 +1,22 @@
+/* 
+  nextjs supports https://github.com/css-modules/css-modules by default,
+  what is really cool is that class names are auto generated (kinda like view encapsulation in angular);
+  this means you dont have to worry about name collisions when you use a module for a given component;
+  furthermore, using CSS modules with next js means that you're code splitting your CSS code as well behind the scenes
+*/
+
+.container {
+  max-width: 36rem;
+  padding: 0 1rem;
+  margin: 3rem auto 6rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.backToHomeLink {
+  margin: 3rem 0 0;
+}
