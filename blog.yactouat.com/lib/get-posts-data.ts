@@ -1,4 +1,5 @@
 export interface PostMetaData {
+  contents: string;
   date: string;
   slug: string;
   title: string;

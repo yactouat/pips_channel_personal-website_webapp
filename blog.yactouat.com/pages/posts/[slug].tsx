@@ -1,5 +1,7 @@
 import Head from "next/head";
+import html from "remark-html";
 import Link from "next/link";
+import { remark } from "remark";
 
 import getAllPostsSlugs from "@/lib/get-all-posts-slugs";
 import { getPostData, PostData } from "@/lib/get-posts-data";
@@ -17,15 +19,22 @@ export async function getStaticPaths() {
 // getting post data for a specific slug to generate the blog post page
 export async function getStaticProps({ params }: any) {
   const postData = await getPostData(params.slug);
-  console.log(postData);
+  const processedPostContents = (
+    await remark().use(html).process(postData.contents)
+  ).toString();
+  const processedPostData = {
+    ...postData,
+    contents: processedPostContents,
+  };
   return {
     props: {
-      postData,
+      postData: processedPostData,
     },
   };
 }
 
 export default function Post({ postData }: { postData: PostData }) {
+  console.log(postData);
   return (
     <MainLayout>
       <Head>
@@ -38,6 +47,7 @@ export default function Post({ postData }: { postData: PostData }) {
       {postData.slug}
       <br />
       {postData.date}
+      <div dangerouslySetInnerHTML={{ __html: postData.contents }} />
       <h2>
         {/* using`Link` here allows to perform client-side navigation, 
           it also triggers pre fetching browser features in production builds 
