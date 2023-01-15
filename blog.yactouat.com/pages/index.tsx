@@ -1,13 +1,8 @@
 import Head from "next/head";
 
+import getPostsMetadata, { BlogPostMetaData } from "@/lib/get-posts-metadata";
 import MainLayout, { siteTitle } from "@/components/main-layout";
 import utilStyles from "@/styles/utils.module.css";
-
-interface BlogPostMetaData {
-  date: string;
-  slug: string;
-  title: string;
-}
 
 interface HomeProps {
   props: {
@@ -15,18 +10,21 @@ interface HomeProps {
   };
 }
 
+/**
+ *
+ * static generation of the home page
+ *
+ * executes server-side at build time;
+ * if you need to execute server-side at request time, use `getServerSideProps`;
+ * also, if you need client-side data fetching, use `useSWR` instead
+ *
+ * @returns {HomeProps} the list of blog posts metadata
+ */
 export async function getStaticProps(): Promise<HomeProps> {
   try {
-    const blogPostsMetadataAPICall = await fetch(
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:8080/blog-posts"
-        : "https://api.yactouat.com/blog-posts"
-    );
-    const blogPostsMetadataJSON = await blogPostsMetadataAPICall.json();
-    const blogPostsMetadata = await blogPostsMetadataJSON.data;
     return {
       props: {
-        list: blogPostsMetadata,
+        list: await getPostsMetadata(),
       },
     };
   } catch (error) {

@@ -1,6 +1,17 @@
-import MainLayout, { siteTitle } from "@/components/main-layout";
 import Head from "next/head";
 import Link from "next/link";
+
+import MainLayout, { siteTitle } from "@/components/main-layout";
+import getAllPostsSlugs from "@/lib/get-all-posts-slugs";
+
+// getting all possible slugs for posts in order to generate static pages
+export async function getStaticPaths() {
+  const paths = getAllPostsSlugs();
+  return {
+    paths,
+    fallback: false,
+  };
+}
 
 export default function Post() {
   return (
