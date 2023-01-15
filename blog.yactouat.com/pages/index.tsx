@@ -1,7 +1,9 @@
 import Head from "next/head";
+import Link from "next/link";
 
+import Date from "@/components/date";
 import { getPostsMetadata, PostMetaData } from "@/lib/get-posts-data";
-import MainLayout, { siteTitle } from "@/components/main-layout";
+import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
 /**
@@ -53,9 +55,11 @@ export default function Home({ list }: { list: PostMetaData[] }) {
         <ul className={utilStyles.list}>
           {list.map(({ date, slug, title }) => (
             <li className={utilStyles.listItem} key={slug}>
-              {title}
+              <Link href={`posts/${slug}`}>{title}</Link>
               <br />
-              {date}
+              <small className={utilStyles.lightText}>
+                <Date dateString={date} />
+              </small>
             </li>
           ))}
         </ul>

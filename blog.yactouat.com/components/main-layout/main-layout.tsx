@@ -1,6 +1,6 @@
 import Head from "next/head";
 import styles from "./main-layout.module.css";
-import utilStyles from "./../styles/utils.module.css";
+import utilStyles from "./../../styles/utils.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -58,9 +58,7 @@ export default function MainLayout({
                 />
               </Link>
               <h2 className={utilStyles.headingLg}>
-                <Link href="/" className={utilStyles.colorInherit}>
-                  {headerTitle}
-                </Link>
+                <Link href="/">{headerTitle}</Link>
               </h2>
             </>
           )}
@@ -68,6 +66,10 @@ export default function MainLayout({
         <main>{children}</main>
         {!isHomePage && (
           <div className={styles.backToHomeLink}>
+            {/* 
+              using`Link` here allows to perform client-side navigation, 
+              it also triggers pre fetching browser features in production builds 
+            */}
             <Link href="/">← Back to home</Link>
           </div>
         )}

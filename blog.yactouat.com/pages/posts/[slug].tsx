@@ -1,11 +1,12 @@
 import Head from "next/head";
 import html from "remark-html";
-import Link from "next/link";
 import { remark } from "remark";
 
+import Date from "@/components/date";
 import getAllPostsSlugs from "@/lib/get-all-posts-slugs";
 import { getPostData, PostData } from "@/lib/get-posts-data";
-import MainLayout, { siteTitle } from "@/components/main-layout";
+import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
+import utilStyles from "@/styles/utils.module.css";
 
 // getting all possible slugs for posts in order to generate static pages
 export async function getStaticPaths() {
@@ -34,7 +35,6 @@ export async function getStaticProps({ params }: any) {
 }
 
 export default function Post({ postData }: { postData: PostData }) {
-  console.log(postData);
   return (
     <MainLayout>
       <Head>
@@ -42,18 +42,13 @@ export default function Post({ postData }: { postData: PostData }) {
           {siteTitle} | {postData.slug}
         </title>
       </Head>
-      {postData.title}
-      <br />
-      {postData.slug}
-      <br />
-      {postData.date}
-      <div dangerouslySetInnerHTML={{ __html: postData.contents }} />
-      <h2>
-        {/* using`Link` here allows to perform client-side navigation, 
-          it also triggers pre fetching browser features in production builds 
-        */}
-        <Link href="/">back</Link>
-      </h2>
+      <article>
+        <h1 className={utilStyles.headingXl}>{postData.title}</h1>
+        <div className={utilStyles.lightText}>
+          <Date dateString={postData.date} />
+        </div>
+        <div dangerouslySetInnerHTML={{ __html: postData.contents }} />
+      </article>
     </MainLayout>
   );
 }
