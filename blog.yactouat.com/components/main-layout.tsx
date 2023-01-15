@@ -57,11 +57,11 @@ export default function MainLayout({
                   alt=""
                 />
               </Link>
-              <h1 className={utilStyles.headingLg}>
+              <h2 className={utilStyles.headingLg}>
                 <Link href="/" className={utilStyles.colorInherit}>
                   {headerTitle}
                 </Link>
-              </h1>
+              </h2>
             </>
           )}
         </header>
