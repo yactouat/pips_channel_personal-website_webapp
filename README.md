@@ -43,7 +43,7 @@ the client-side code that powers my personal website API, feel free to use this 
 
 ## CI/CD
 
-- app' is deployed on Vercel, creating a PR should allow for previewing
+app' is deployed on Vercel, creating a PR should allow for previewing; watch out for the root directory of the app' and the preset configuration of the Vercel app' when you set up the project
 
 ## contribution guidelines
 
