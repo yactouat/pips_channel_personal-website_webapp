@@ -4,6 +4,7 @@
 
 - [pips_channel_personal-website_webapp](#pips_channel_personal-website_webapp)
   - [what is this ?](#what-is-this-)
+  - [resources and endpoints](#resources-and-endpoints)
   - [pre requisites](#pre-requisites)
   - [how to run](#how-to-run)
   - [good to know](#good-to-know)
@@ -15,6 +16,12 @@
 ## what is this ?
 
 the client-side code that powers my personal website API, feel free to use this as a template for your own blog
+
+## resources and endpoints
+
+- `/` : the home page
+- `/posts/:slug` : the given post by slug or 404
+- `/api/status` : the status of the app'
 
 ## pre requisites
 

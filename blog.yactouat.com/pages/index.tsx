@@ -51,7 +51,9 @@ export default function Home({ list }: { list: PostMetaData[] }) {
         </p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Latest posts</h2>
+        {list.length > 0 && (
+          <h2 className={utilStyles.headingLg}>Latest posts</h2>
+        )}
         <ul className={utilStyles.list}>
           {list.map(({ date, slug, title }) => (
             <li className={utilStyles.listItem} key={slug}>
