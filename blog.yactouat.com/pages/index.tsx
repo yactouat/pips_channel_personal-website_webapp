@@ -41,6 +41,10 @@ export default function Home({ list }: { list: PostMetaData[] }) {
       <Head>
         <title>{siteTitle} | Home</title>
         {/* scripts that need to be loaded ASAP should go here */}
+        <meta property="og:title" content="blog.yactouat.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://blog.yactouat.com/" />
+        {/* TODO add OpenGraph images here and in the post(s) page */}
       </Head>
       <section className={utilStyles.headingMd}>
         <p>

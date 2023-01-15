@@ -39,8 +39,17 @@ export default function Post({ postData }: { postData: PostData }) {
     <MainLayout>
       <Head>
         <title>
-          {siteTitle} | {postData.slug}
+          {siteTitle} | {postData.title}
         </title>
+        <meta
+          property="og:title"
+          content={siteTitle + " | " + postData.title}
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:url"
+          content={`https://blog.yactouat.com/posts/${postData.slug}`}
+        />
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
