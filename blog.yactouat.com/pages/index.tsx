@@ -45,6 +45,7 @@ export default function Home({ list }: { list: PostMetaData[] }) {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://blog.yactouat.com/" />
         {/* TODO add OpenGraph images here and in the post(s) page */}
+        <meta name="description" content="yactouat's blog app'" />
       </Head>
       <section className={utilStyles.headingMd}>
         <p>

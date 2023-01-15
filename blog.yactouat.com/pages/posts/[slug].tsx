@@ -50,6 +50,7 @@ export default function Post({ postData }: { postData: PostData }) {
           property="og:url"
           content={`https://blog.yactouat.com/posts/${postData.slug}`}
         />
+        <meta name="description" content={siteTitle + " | " + postData.title} />
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
