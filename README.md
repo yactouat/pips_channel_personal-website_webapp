@@ -8,6 +8,7 @@
   - [pre requisites](#pre-requisites)
   - [how to run](#how-to-run)
   - [good to know](#good-to-know)
+  - [CI/CD](#cicd)
   - [contribution guidelines](#contribution-guidelines)
   - [contributors](#contributors)
 
@@ -39,6 +40,10 @@ the client-side code that powers my personal website API, feel free to use this 
 - conditional styling can be enabled using [`clsx` package](https://github.com/lukeed/clsx)
 - fonts are loaded via [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Roboto font
 - images are automatically optimized for size, responsiveness, and lazy loading
+
+## CI/CD
+
+- app' is deployed on Vercel, creating a PR should allow for previewing
 
 ## contribution guidelines
 
