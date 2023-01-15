@@ -1,14 +1,8 @@
 import Head from "next/head";
 
-import getPostsMetadata, { BlogPostMetaData } from "@/lib/get-posts-metadata";
+import { getPostsMetadata, PostMetaData } from "@/lib/get-posts-data";
 import MainLayout, { siteTitle } from "@/components/main-layout";
 import utilStyles from "@/styles/utils.module.css";
-
-interface HomeProps {
-  props: {
-    list: BlogPostMetaData[];
-  };
-}
 
 /**
  *
@@ -18,9 +12,9 @@ interface HomeProps {
  * if you need to execute server-side at request time, use `getServerSideProps`;
  * also, if you need client-side data fetching, use `useSWR` instead
  *
- * @returns {HomeProps} the list of blog posts metadata
+ * @returns the list of blog posts metadata as props to pass to the Home component
  */
-export async function getStaticProps(): Promise<HomeProps> {
+export async function getStaticProps() {
   try {
     return {
       props: {
@@ -38,8 +32,7 @@ export async function getStaticProps(): Promise<HomeProps> {
   }
 }
 
-export default function Home(props: HomeProps) {
-  const blogPostsMetadata = props.list;
+export default function Home({ list }: { list: PostMetaData[] }) {
   return (
     <MainLayout isHomePage>
       {/* this is here that you would modify the metadata of your app' */}
@@ -58,7 +51,7 @@ export default function Home(props: HomeProps) {
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {blogPostsMetadata.map(({ date, slug, title }) => (
+          {list.map(({ date, slug, title }) => (
             <li className={utilStyles.listItem} key={slug}>
               {title}
               <br />

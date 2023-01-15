@@ -1,11 +1,13 @@
-import getPostsMetadata from "./get-posts-metadata";
+import { getPostsMetadata } from "./get-posts-data";
 
-// used in ./pages/posts/[slug].tsx
 export const getAllPostsSlugs = async () => {
-  const postsSlugs = (await getPostsMetadata()).map((post) => {
-    params: {
-      slug: post.slug;
-    }
+  const postsMetadata = await getPostsMetadata();
+  return postsMetadata.map((post) => {
+    return {
+      params: {
+        slug: post.slug,
+      },
+    };
   });
 };
 
