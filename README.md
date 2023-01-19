@@ -45,6 +45,8 @@ the client-side code that powers my personal website API, feel free to use this 
 
 app' is deployed on Vercel, creating a PR should allow for previewing; watch out for the root directory of the app' and the preset configuration of the Vercel app' when you set up the project
 
+thanks to the Vercel API, you can also trigger builds programmatically
+
 ## contribution guidelines
 
 dear past, present, and future contributors, you have my many thanks, but please follow these guidelines:
