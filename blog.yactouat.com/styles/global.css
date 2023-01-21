@@ -1,7 +1,7 @@
+/* general */
 * {
   box-sizing: border-box;
 }
-
 html,
 body {
   padding: 0;
@@ -11,15 +11,23 @@ body {
   font-size: 18px;
 }
 
+/* links */
 a {
   color: inherit;
 }
+.content-links::after {
+  content: url("/icons/external-link.svg");
+  margin-left: 4px;
+  margin-right: 4px;
+}
 
+/* images */
 img {
   max-width: 100%;
   display: block;
 }
 
+/* dark them */
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

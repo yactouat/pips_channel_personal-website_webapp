@@ -22,7 +22,12 @@ export async function getStaticProps({ params }: any) {
   const postData = await getPostData(params.slug);
   const processedPostContents = (
     await remark().use(html).process(postData.contents)
-  ).toString();
+  )
+    .toString()
+    // removing target="_blank" from links of the TOC
+    .replace(/<a href="#/g, '<a class="toc-links" href="')
+    // adding target="_blank" to all content links
+    .replace(/<a href="/g, '<a class="content-links" target="_blank" href="');
   const processedPostData = {
     ...postData,
     contents: processedPostContents,
@@ -54,7 +59,7 @@ export default function Post({ postData }: { postData: PostData }) {
       </Head>
       <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
-        <div className={utilStyles.lightText}>
+        <div className={`${utilStyles.lightText}`}>
           <Date dateString={postData.date} />
         </div>
         <div dangerouslySetInnerHTML={{ __html: postData.contents }} />
