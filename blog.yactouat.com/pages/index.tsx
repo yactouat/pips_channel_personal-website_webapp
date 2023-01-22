@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 import Date from "@/components/date";
-import { getPostsMetadata, PostMetaData } from "@/lib/get-posts-data";
+import { getPostsMetadata } from "@/lib/get-posts-data";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
@@ -34,7 +34,15 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ list }: { list: PostMetaData[] }) {
+export default function Home({
+  list,
+}: {
+  list: {
+    date: string;
+    slug: string;
+    title: string;
+  }[];
+}) {
   return (
     <MainLayout isHomePage>
       {/* this is here that you would modify the metadata of your app' */}

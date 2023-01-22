@@ -1,6 +1,6 @@
 {
   "name": "blog.yactouat.com",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
@@ -17,6 +17,7 @@
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.2",
     "next": "13.1.2",
+    "pips_resources_definitions": "^1.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "remark": "^14.0.2",

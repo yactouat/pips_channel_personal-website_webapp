@@ -1,10 +1,11 @@
+import { BlogPostResource } from "pips_resources_definitions/dist/resources";
 import Head from "next/head";
 import html from "remark-html";
 import { remark } from "remark";
 
 import Date from "@/components/date";
 import getAllPostsSlugs from "@/lib/get-all-posts-slugs";
-import { getPostData, PostData } from "@/lib/get-posts-data";
+import { getPostData } from "@/lib/get-posts-data";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
@@ -39,7 +40,7 @@ export async function getStaticProps({ params }: any) {
   };
 }
 
-export default function Post({ postData }: { postData: PostData }) {
+export default function Post({ postData }: { postData: BlogPostResource }) {
   return (
     <MainLayout>
       <Head>

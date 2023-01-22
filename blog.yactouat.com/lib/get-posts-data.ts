@@ -1,13 +1,6 @@
-export interface PostMetaData {
-  contents: string;
-  date: string;
-  slug: string;
-  title: string;
-}
+import { BlogPostResource } from "pips_resources_definitions/dist/resources";
 
-export interface PostData extends PostMetaData {}
-
-export const getPostData = async (slug: string): Promise<PostData> => {
+export const getPostData = async (slug: string): Promise<BlogPostResource> => {
   const baseUrl =
     process.env.NODE_ENV === "development"
       ? "http://localhost:8080"
@@ -18,16 +11,28 @@ export const getPostData = async (slug: string): Promise<PostData> => {
   return postData;
 };
 
-export const getPostsMetadata = async (): Promise<PostMetaData[]> => {
+export const getPostsMetadata = async (): Promise<
+  {
+    date: string;
+    slug: string;
+    title: string;
+  }[]
+> => {
   try {
-    const postsMetadataAPICall = await fetch(
+    const postsDataAPICall = await fetch(
       process.env.NODE_ENV === "development"
         ? "http://localhost:8080/blog-posts"
         : "https://api.yactouat.com/blog-posts"
     );
-    const postsMetadataJSON = await postsMetadataAPICall.json();
-    const postsMetadata = postsMetadataJSON.data;
-    return postsMetadata;
+    const postsDataJSON = await postsDataAPICall.json();
+    const postsData = postsDataJSON.data;
+    return postsData.map((post: BlogPostResource) => {
+      return {
+        date: post.date,
+        slug: post.slug,
+        title: post.title,
+      };
+    });
   } catch (error) {
     console.error(error);
     return [];
