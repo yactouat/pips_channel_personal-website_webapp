@@ -7,7 +7,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIResponseType>
 ) {
-  let buildWentThrough = false;
+  let processOk = false;
   const pubsubTokenAud = process.env.PUBSUB_TOKEN_AUDIENCE;
   const pubsubTokenEmail = process.env.PUBSUB_TOKEN_EMAIL;
 
@@ -18,23 +18,35 @@ export default async function handler(
     console.log("encoded jwt token from google", token);
 
     // decode the JWT
-    const decodedToken = jwtDecode(token);
+    const decodedToken = JSON.parse(jwtDecode(token));
     console.log("decoded jwt token from google", decodedToken);
 
-    // TODO verify claims
+    // verifying the claims
+    processOk =
+      (
+        decodedToken as {
+          aud: string;
+        }
+      ).aud === pubsubTokenAud &&
+      (
+        decodedToken as {
+          email: string;
+        }
+      ).email === pubsubTokenEmail;
+    console.log("processOk", processOk ? "true" : "false");
 
     // the message is a unicode string encoded in base64.
     const message = JSON.parse(
       Buffer.from(req.body.message.data, "base64").toString("utf-8")
     );
     console.log("message from google", message);
-    buildWentThrough =
-      message.aud === pubsubTokenAud && message.email === pubsubTokenEmail;
+  }
 
+  if (processOk) {
     // TODO trigger Vercel build
   }
 
-  if (buildWentThrough) {
+  if (processOk) {
     res
       .status(200)
       .json({ msg: "blog.yactouat.com build triggered", data: null });
