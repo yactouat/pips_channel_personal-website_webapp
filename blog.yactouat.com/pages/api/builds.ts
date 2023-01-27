@@ -8,6 +8,8 @@ export default async function handler(
   res: NextApiResponse<APIResponseType>
 ) {
   let buildWentThrough = false;
+  const pubsubTokenAud = process.env.PUBSUB_TOKEN_AUDIENCE;
+  const pubsubTokenEmail = process.env.PUBSUB_TOKEN_EMAIL;
 
   if (req.method === "POST") {
     // get the Cloud Pub/Sub-generated JWT in the "Authorization" header.
@@ -22,10 +24,14 @@ export default async function handler(
     // TODO verify claims
 
     // the message is a unicode string encoded in base64.
-    const message = Buffer.from(req.body.message.data, "base64").toString(
-      "utf-8"
+    const message = JSON.parse(
+      Buffer.from(req.body.message.data, "base64").toString("utf-8")
     );
     console.log("message from google", message);
+    buildWentThrough =
+      message.aud === pubsubTokenAud && message.email === pubsubTokenEmail;
+
+    // TODO trigger Vercel build
   }
 
   if (buildWentThrough) {
