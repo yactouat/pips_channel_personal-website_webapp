@@ -24,8 +24,9 @@ the client-side code that powers my personal website API, feel free to use this 
 
 ### API
 
-- `/api/builds` : PubSub webhook to trigger a build on Vercel
-- `/api/statuses` : returns the current status of the app'
+- GET `/api/builds` : get the latest builds of the app'
+- POST `/api/builds` : PubSub webhook to trigger a build on Vercel
+- GET `/api/statuses` : returns the current status of the app'
 
 ### web app'
 
@@ -58,8 +59,9 @@ thanks to the Vercel API, you can also trigger builds programmatically
 as matter of fact, the `/api/builds` endpoint is a webhook that triggers a build on Vercel when receiving a Google PubSub message; for this to work, you need to have:
 
 - a Google Pub Sub push subscription sent to your live `api/builds` endpoint
-- a `PUBSUB_TOKEN_AUDIENCE` environment variable set to the audience of the token you'll receive from Google PubSub
+- a `PUBSUB_TOKEN_AUDIENCE` environment variable set on your Vercel deployment to the audience of the token you'll receive from Google PubSub
 - a `PUBSUB_TOKEN_EMAIL` environment variable set to the email of the Google service account that is sending the push subscription message
+- a `VERCEL_PROJECT` and a `VERCEL_TOKEN` environment variable set to a Vercel API token
 
 ## contribution guidelines
 
