@@ -5,6 +5,8 @@
 - [pips_channel_personal-website_webapp](#pips_channel_personal-website_webapp)
   - [what is this ?](#what-is-this-)
   - [resources and endpoints](#resources-and-endpoints)
+    - [API](#api)
+    - [web app'](#web-app)
   - [pre requisites](#pre-requisites)
   - [how to run](#how-to-run)
   - [good to know](#good-to-know)
@@ -20,9 +22,15 @@ the client-side code that powers my personal website API, feel free to use this 
 
 ## resources and endpoints
 
+### API
+
+- `/api/builds` : PubSub webhook to trigger a build on Vercel
+- `/api/statuses` : returns the current status of the app'
+
+### web app'
+
 - `/` : the home page
 - `/posts/:slug` : the given post by slug or 404
-- `/api/status` : the status of the app'
 
 ## pre requisites
 
@@ -46,6 +54,8 @@ the client-side code that powers my personal website API, feel free to use this 
 app' is deployed on Vercel, creating a PR should allow for previewing; watch out for the root directory of the app' and the preset configuration of the Vercel app' when you set up the project
 
 thanks to the Vercel API, you can also trigger builds programmatically
+
+as matter of fact, the `/api/builds` endpoint is a webhook that triggers a build on Vercel when receiving a Google PubSub message
 
 ## contribution guidelines
 
