@@ -22,6 +22,12 @@ export default async function handler(
     console.log("decoded jwt token from google", decodedToken);
 
     // verifying the claims
+    console.log(
+      "google decoded audience",
+      decodedToken as {
+        aud: string;
+      }
+    );
     processOk =
       (
         decodedToken as {
