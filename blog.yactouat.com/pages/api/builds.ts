@@ -18,7 +18,7 @@ export default async function handler(
     console.log("encoded jwt token from google", token);
 
     // decode the JWT
-    const decodedToken = JSON.parse(jwtDecode(token));
+    const decodedToken = jwtDecode(token);
     console.log("decoded jwt token from google", decodedToken);
 
     // verifying the claims
