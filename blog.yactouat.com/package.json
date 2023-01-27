@@ -16,6 +16,7 @@
     "date-fns": "^2.29.3",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.2",
+    "jwt-decode": "^3.1.2",
     "next": "13.1.2",
     "pips_resources_definitions": "^1.0.0",
     "react": "18.2.0",

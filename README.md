@@ -55,7 +55,7 @@ app' is deployed on Vercel, creating a PR should allow for previewing; watch out
 
 thanks to the Vercel API, you can also trigger builds programmatically
 
-as matter of fact, the `/api/builds` endpoint is a webhook that triggers a build on Vercel when receiving a Google PubSub message
+as matter of fact, the `/api/builds` endpoint is a webhook that triggers a build on Vercel when receiving a Google PubSub message; for this to work
 
 ## contribution guidelines
 
