@@ -24,6 +24,14 @@ export default async function handler(
       process.env.PUBSUB_TOKEN_AUDIENCE as string,
       process.env.PUBSUB_TOKEN_EMAIL as string
     );
+    // posting the build request
+    if (pubSubEventWorkflowOk) {
+      try {
+        await postVercelBuild();
+      } catch (error) {
+        console.log("Pub/Sub event workflow Vercel build part KO");
+      }
+    }
     // responding to the inbound request so no reties will be attempted
     if (pubSubEventWorkflowOk) {
       console.log("Pub/Sub event workflow outcome OK");
@@ -33,19 +41,8 @@ export default async function handler(
     } else {
       console.log("Pub/Sub event workflow outcome KO");
       res
-        .status(400)
+        .status(422)
         .json({ msg: "Pub/Sub event workflow outcome KO", data: null });
-    }
-    // posting the build request
-    if (pubSubEventWorkflowOk) {
-      try {
-        await postVercelBuild();
-        console.log("Pub/Sub event workflow Vercel build part OK");
-      } catch (error) {
-        pubSubEventWorkflowOk = false;
-        console.error(error);
-        console.log("Pub/Sub event workflow Vercel build part KO");
-      }
     }
   }
 }
