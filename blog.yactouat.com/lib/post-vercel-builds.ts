@@ -34,7 +34,7 @@ const postVercelBuild = async (): Promise<boolean> => {
         });
         const vercelBuildRes = await vercelBuildAPICall.data;
         // so I can see the logs in the cloud
-        console.log(vercelBuildRes);
+        console.log("VERCEL BUILD RES", vercelBuildRes);
         buildWentThrough = vercelBuildAPICall.status == 200;
         break;
       }
@@ -53,7 +53,7 @@ const postVercelBuild = async (): Promise<boolean> => {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.log("deletion of previous deployments failed");
   }
   return buildWentThrough;
 };
