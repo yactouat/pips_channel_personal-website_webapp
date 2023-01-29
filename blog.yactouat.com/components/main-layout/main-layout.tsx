@@ -9,8 +9,8 @@ interface LayoutProps {
   isHomePage?: boolean;
 }
 
-const headerTitle = "yactouat's personal blog";
-export const siteTitle = "blog.yactouat.com";
+const headerTitle = "yactouat's personal website";
+export const siteTitle = "yactouat.com";
 
 export default function MainLayout({
   children,

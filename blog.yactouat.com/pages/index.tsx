@@ -60,7 +60,7 @@ export default function Home({
           👋 I'm Yacine, and I'm a generalist web developer who is driven by
           curiosity, positivity, and a can-do attitude; I like to design full
           stack solutions with various technologies, my objective is to have fun
-          while solving problems with code! Welcome to my blog app'...
+          while solving problems with code! Welcome to my personal website...
         </p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
