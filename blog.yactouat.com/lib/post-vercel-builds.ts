@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BuildResource as VercelDeployment } from "pips_resources_definitions/dist/resources";
+import { VercelDeploymentType as VercelDeployment } from "pips_resources_definitions/dist/types";
 
 import getVercelBuilds from "./get-vercel-builds";
 
