@@ -8,6 +8,7 @@ const postVercelBuild = async (): Promise<boolean> => {
   try {
     // fetching list of deployments
     const vercelDeployments = await getVercelBuilds();
+    console.log("latest vercel deployment", vercelDeployments[0]);
     // looping through deployments to find the latest ready one from GitOps
     for (let i = 0; i < vercelDeployments.length; i++) {
       const deployment: VercelDeployment = vercelDeployments[i];
