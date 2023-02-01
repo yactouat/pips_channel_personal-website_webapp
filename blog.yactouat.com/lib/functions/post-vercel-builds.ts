@@ -33,9 +33,11 @@ const postVercelBuild = async (): Promise<boolean> => {
           url: "https://api.vercel.com/v13/deployments",
         });
         const vercelBuildRes = await vercelBuildAPICall.data;
-        // so I can see the logs in the cloud
-        console.log("VERCEL BUILD RES", vercelBuildRes);
         buildWentThrough = vercelBuildAPICall.status == 200;
+        if (!buildWentThrough) {
+          // so I can see the logs in the cloud
+          console.log("FAILED VERCEL BUILD RES", vercelBuildRes);
+        }
         break;
       }
     }
