@@ -44,7 +44,7 @@ export default function Home({
   }[];
 }) {
   return (
-    <MainLayout isHomePage>
+    <MainLayout page="home">
       {/* this is here that you would modify the metadata of your app' */}
       <Head>
         <title>{siteTitle} | Home</title>

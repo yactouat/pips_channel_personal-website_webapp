@@ -49,6 +49,7 @@ the client-side code that powers my personal website API, feel free to use this 
 - conditional styling can be enabled using [`clsx` package](https://github.com/lukeed/clsx)
 - fonts are loaded via [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Roboto font
 - images are automatically optimized for size, responsiveness, and lazy loading
+- the main backend that this application is supposed to be consuming is the [pips_channel_personal-website_api](https://github.com/yactouat/pips_channel_personal-website_api) project, all instructions on how to run it are available in the README
 
 ## CI/CD
 
