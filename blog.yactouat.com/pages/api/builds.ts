@@ -10,6 +10,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import getVercelBuilds from "@/lib/functions/get-vercel-builds";
 import postVercelBuild from "@/lib/functions/post-vercel-builds";
 
+interface BlogPostPublishedPubSubMessage {
+  name: string;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<APIResponseType>
@@ -36,10 +40,12 @@ export default async function handler(
     process.env.PUBSUB_TOKEN_EMAIL as string
   );
   const message = decodePubSubMessage(req);
-  console.log("Pub/Sub event workflow message", message);
-  console.log("Pub/Sub event workflow message type", typeof message);
-  // posting the build request
-  if (pubSubEventWorkflowOk) {
+  // console.log("Pub/Sub event workflow message", message);
+  // posting the build request only if published post
+  if (
+    pubSubEventWorkflowOk &&
+    (message as BlogPostPublishedPubSubMessage).name.startsWith("published")
+  ) {
     try {
       await postVercelBuild();
     } catch (error) {
