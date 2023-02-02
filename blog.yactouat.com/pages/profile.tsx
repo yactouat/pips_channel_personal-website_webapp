@@ -1,25 +1,29 @@
 import Head from "next/head";
+import { useState, useEffect } from "react";
 
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
-// TODO do not user SSR here, use SSG instead
-// export async function getStaticProps() {
-//   try {
-//     return {
-//       props: {},
-//     };
-//   } catch (error) {
-//     // TODO better observability and alerting here
-//     console.error(error);
-//     return {
-//       props: {},
-//     };
-//   }
-// }
-
 // export default function Profile({}: {}) {
 export default function Profile() {
+  // TODO handle missing data
+  const [data, setData] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    // TODO fetch profile data from API
+    // fetch("/api/profile-data")
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setData(data);
+    //     setLoading(false);
+    //   });
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <MainLayout page="profile">
       <Head>
@@ -28,12 +32,15 @@ export default function Profile() {
         {/* scripts that need to be loaded ASAP should go here */}
         <meta name="robots" content="noindex" />
       </Head>
-      <section className={utilStyles.headingMd}>
-        <p>
-          Welcome to your private profile page ! it's pretty empty for now but I
-          have exicting new features planned ... 😉
-        </p>
-      </section>
+      {!isLoading && (
+        <section className={utilStyles.headingMd}>
+          <p>
+            Welcome to your private profile page ! it's pretty empty for now but
+            I have exicting new features planned ... 😉
+          </p>
+        </section>
+      )}
+      {isLoading && <p>Loading...</p>}
     </MainLayout>
   );
 }
