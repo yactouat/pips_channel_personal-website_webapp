@@ -1,13 +1,24 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import useSWR from "swr";
 
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
 // export default function Profile({}: {}) {
 export default function Profile() {
+  // TODO use SWR to fetch profile data
+  // const { data, error } = useSWR(
+  //   "/api/profile-data",
+  //   () => fetch("https://jsonplaceholder.typicode.com/todos/1").then((res) =>
+  //     res.json()
+  //   )
+  // );
+  // if (error) return <div>Failed to load</div>
+  // if (!data) return <div>Loading...</div>
+
   // TODO handle missing data
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
