@@ -4,11 +4,11 @@
 }
 html,
 body {
-  padding: 0;
-  margin: 0;
   font-family: Roboto, sans-serif;
-  line-height: 1.6;
   font-size: 18px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
 /* links */

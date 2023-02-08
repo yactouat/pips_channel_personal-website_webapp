@@ -21,6 +21,10 @@
   margin: 3rem 0 0;
 }
 
+.svg {
+  fill: #000;
+}
+
 @media (prefers-color-scheme: dark) {
   .svg {
     fill: #fff;

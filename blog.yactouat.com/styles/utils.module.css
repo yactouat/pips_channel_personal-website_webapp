@@ -8,6 +8,11 @@
   color: #666;
 }
 
+/* display */
+.flex {
+  display: flex;
+}
+
 /* headings, sorted desc */
 .heading2Xl {
   font-size: 2.5rem;
@@ -46,4 +51,9 @@
 /* spacing */
 .padding1px {
   padding-top: 1px;
+}
+
+/* visibility, opacity, overlays etc. */
+.hidden {
+  visibility: hidden;
 }

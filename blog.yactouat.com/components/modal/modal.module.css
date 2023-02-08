@@ -1,0 +1,19 @@
+.closeBtn {
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 450px;
+  padding: 1.3rem;
+  min-height: 250px;
+  position: absolute;
+  top: 20%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}
+
+/* TODO rest of the modal following https://www.freecodecamp.org/news/how-to-build-a-modal-with-javascript/ */
