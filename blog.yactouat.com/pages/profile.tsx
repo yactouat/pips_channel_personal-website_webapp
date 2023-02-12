@@ -13,11 +13,11 @@ const usersApiEndpoint =
     ? `http://localhost:8080/users/`
     : `https://api.yactouat.com/users/`;
 
-const getPersistedUserAuthToken = () => {
+const getPersistedUserAuthToken = (): string => {
   return localStorage.getItem("userAuthToken") ?? "";
 };
 
-const getPersistedUserId = () => {
+const getPersistedUserId = (): number | null => {
   if (/^\d+$/.test(localStorage.getItem("userId") ?? "")) {
     return parseInt(localStorage.getItem("userId") ?? "");
   }
@@ -33,40 +33,40 @@ const persistUserId = (userId: number): void => {
 };
 
 export default function Profile() {
+  const router = useRouter();
+
   const [erroring, setErroring] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [title, setTitle] = useState("...loading");
+  const [htmlTitle, setHtmlTitle] = useState("...loading");
+
   const [userAuthToken, setUserAuthToken] = useState<null | string>(null);
   const [userData, setUserData] = useState<null | UserProfileDataInterface>(
     null
   );
   const [userId, setUserId] = useState<null | string>(null);
 
-  const [isAccountVerifNavigated, setIsAccountVerifNavigated] = useState(false);
-  const [userVerifModalText, setUserVerifModalText] = useState(
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalText, setModalText] = useState(
     "Please wait while we are verifying your profile..."
   );
-
-  const router = useRouter();
 
   useEffect(() => {
     setUserAuthToken(getPersistedUserAuthToken());
     setUserId((getPersistedUserId() ?? "").toString());
   }, []);
 
+  // parsing verification token navigation
   useEffect(() => {
     const verifUserId = router.query.userid as string;
-    // parsing verification token navigation
     if (
       router.query.email != null &&
       router.query.veriftoken != null &&
       router.query.userid != null &&
       /^\d+$/.test(verifUserId)
     ) {
-      setIsAccountVerifNavigated(true);
+      setIsModalOpen(true);
       const verifEmail = router.query.email as string;
       const urlVerifToken = router.query.veriftoken as string;
-      setUserId(verifUserId);
       axios
         .put(`${usersApiEndpoint}${verifUserId}`, {
           email: verifEmail,
@@ -77,33 +77,31 @@ export default function Profile() {
           const resPayload = response.data.data;
           if (resPayload == null) {
             setErroring(true);
-            setTitle("...error");
+            setHtmlTitle("...error");
           } else {
-            setUserData(resPayload.user);
-            setTitle(resPayload.user.email);
+            setModalText("Your profile has been verified !");
             persistUserAuthToken(resPayload.token);
             persistUserId(resPayload.user.id);
-            setUserVerifModalText("Your profile has been verified !");
-            setTimeout(() => {
-              setIsAccountVerifNavigated(false);
-              setUserAuthToken(resPayload.token);
-              setUserId(verifUserId);
-            }, 2000);
+            setErroring(false);
+            setHtmlTitle(resPayload.user.email);
+            setUserAuthToken(resPayload.token);
+            setUserId(verifUserId);
+            setUserData(resPayload.user);
           }
         })
         .catch((err) => {
           console.error(err);
-          setErroring(true);
-          setTitle("...error");
-          setUserVerifModalText(
+          setModalText(
             "Sorry, we could not verify your profile, please try again later..."
           );
-          setTimeout(() => {
-            setIsAccountVerifNavigated(false);
-          }, 2000);
+          setErroring(true);
+          setHtmlTitle("...error");
         })
         .finally(() => {
           setLoading(false);
+          setTimeout(() => {
+            setIsModalOpen(false);
+          }, 2000);
         });
     }
   }, [router.query]);
@@ -119,25 +117,28 @@ export default function Profile() {
           },
         })
         .then((response) => {
-          if (response.data == null) {
+          const resPayload = response.data.data;
+          console.log(resPayload);
+          if (resPayload == null) {
             setErroring(true);
-            setTitle("...error");
+            setHtmlTitle("...error");
           } else {
-            setUserData(response.data);
-            setTitle(response.data.email);
+            setErroring(false);
+            setHtmlTitle(resPayload.email);
+            setUserData(resPayload);
           }
         })
         .catch((err) => {
           setErroring(true);
-          setTitle("...error");
+          setHtmlTitle("...error");
         })
         .finally(() => {
           setLoading(false);
         });
-    } else {
+    } else if (!userData) {
       setErroring(true);
       setLoading(false);
-      setTitle("...error");
+      setHtmlTitle("...error");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthToken]);
@@ -147,7 +148,7 @@ export default function Profile() {
       <Head>
         {/* TODO show actual user email */}
         <title>
-          {title} | {siteTitle} Profile
+          {htmlTitle} | {siteTitle} Profile
         </title>
         {/* scripts that need to be loaded ASAP should go here */}
         <meta name="robots" content="noindex" />
@@ -177,10 +178,10 @@ export default function Profile() {
         </p>
       )}
 
-      {isAccountVerifNavigated && (
+      {isModalOpen && (
         <Modal>
           <div>
-            <p>{userVerifModalText}</p>
+            <p>{modalText}</p>
           </div>
         </Modal>
       )}
