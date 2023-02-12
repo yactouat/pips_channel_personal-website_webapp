@@ -34,7 +34,19 @@ export default function Profile() {
   const router = useRouter();
 
   useEffect(() => {
-    setLoading(true);
+    // parsing verification token navigation
+    if (
+      router.query.email != null &&
+      router.query.veriftoken != null &&
+      router.query.userid != null
+    ) {
+      setIsAccountVerifNavigated(true);
+      setVerifEmail(router.query.email as string);
+      setVerifToken(router.query.token as string);
+      setVerifUserId(router.query.userId as string);
+    }
+
+    // auto sign in
     fetch(
       process.env.NODE_ENV === "development"
         ? `http://localhost:8080/users/${getUserId()}`
@@ -52,7 +64,6 @@ export default function Profile() {
           setErroring(true);
           setTitle("...error");
         }
-        console.log(resPayload.data);
         setUserData(resPayload.data);
         setLoading(false);
         setTitle(resPayload.data.email);
@@ -62,36 +73,6 @@ export default function Profile() {
         setLoading(false);
         setTitle("...error");
       });
-  }, []);
-
-  useEffect(() => {
-    // const searchParams = new URLSearchParams(
-    //   window.location.href.substring(
-    //     window.location.href.lastIndexOf("profile?") + 8
-    //   )
-    // );
-    console.log(router.query);
-
-    // const urlParams = new URLSearchParams(window.location.search);
-    // urlParams.forEach((val, key) => {
-    //   console.log(key, val);
-    //   switch (key) {
-    //     case "email":
-    //       setVerifEmail(val);
-    //       break;
-    //     case "veriftoken":
-    //       setVerifToken(val);
-    //       break;
-    //     case "userid":
-    //       setVerifUserId(val);
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    //   if (verifEmail && verifToken && verifUserId) {
-    //     setIsAccountVerifNavigated(true);
-    //   }
-    // });
   }, [router.query]);
 
   return (
