@@ -8,6 +8,9 @@ import utilStyles from "@/styles/utils.module.css";
 import Modal from "@/components/modal/modal";
 import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 
+// TODO split the code a little bit more
+// TODO erase local storage where relevant
+
 const usersApiEndpoint =
   process.env.NODE_ENV === "development"
     ? `http://localhost:8080/users/`
