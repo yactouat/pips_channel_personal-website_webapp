@@ -130,8 +130,9 @@ export default function Profile() {
           setLoading(false);
         });
     } else {
-      setLoading(false);
       setErroring(true);
+      setLoading(false);
+      setTitle("...error");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthToken]);
