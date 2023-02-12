@@ -1,13 +1,10 @@
 import styles from "./modal.module.css";
+import ModalProps from "./ModalProps";
 
-const Modal = () => {
+const Modal = ({ children }: ModalProps) => {
   return (
     <>
-      <section className={`${styles.modal}`}>
-        <div>
-          <p>modal works</p>
-        </div>
-      </section>
+      <section className={`${styles.modal}`}>{children}</section>
       <div className="overlay"></div>
     </>
   );

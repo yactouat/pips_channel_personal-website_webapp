@@ -18,6 +18,12 @@ const getUserToken = () => {
   return localStorage.getItem("userAuthToken") ?? "";
 };
 
+const UserVerificationModalContents = () => (
+  <div>
+    <p>modal works</p>
+  </div>
+);
+
 export default function Profile() {
   const [erroring, setErroring] = useState(false);
   const [isLoading, setLoading] = useState(true);
@@ -30,6 +36,9 @@ export default function Profile() {
   const [verifToken, setVerifToken] = useState("");
   const [verifUserId, setVerifUserId] = useState("");
   const [isAccountVerifNavigated, setIsAccountVerifNavigated] = useState(false);
+  const [userVerifModalText, setUserVerifModalText] = useState(
+    "Please wait while we are verifying your profile..."
+  );
 
   const router = useRouter();
 
@@ -108,7 +117,13 @@ export default function Profile() {
         <p>Sorry we have encountered an error, please try again later...</p>
       )}
 
-      {isAccountVerifNavigated && <Modal />}
+      {isAccountVerifNavigated && (
+        <Modal>
+          <div>
+            <p>{userVerifModalText}</p>
+          </div>
+        </Modal>
+      )}
     </MainLayout>
   );
 }
