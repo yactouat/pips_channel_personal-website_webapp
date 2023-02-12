@@ -81,10 +81,23 @@ export default function Profile() {
             setTitle(response.data.user.email);
             persistUserAuthToken(response.data.token);
             persistUserId(response.data.user.id);
+            setUserVerifModalText("Your profile has been verified !");
+            setTimeout(() => {
+              setIsAccountVerifNavigated(false);
+            }, 1000);
           }
         })
+        .catch((err) => {
+          setErroring(true);
+          setTitle("...error");
+          setUserVerifModalText(
+            "Sorry, we could not verify your profile, please try again later..."
+          );
+          setTimeout(() => {
+            setIsAccountVerifNavigated(false);
+          }, 1000);
+        })
         .finally(() => {
-          setIsAccountVerifNavigated(false);
           setLoading(false);
         });
     }
