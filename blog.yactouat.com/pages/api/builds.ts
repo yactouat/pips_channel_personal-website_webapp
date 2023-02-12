@@ -3,8 +3,8 @@ import { APIResponseType } from "pips_resources_definitions/dist/types";
 import { comesFromLegitPubSub } from "pips_resources_definitions/dist/behaviors";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import getVercelBuilds from "@/lib/get-vercel-builds";
-import postVercelBuild from "@/lib/post-vercel-builds";
+import getVercelBuilds from "@/lib/functions/get-vercel-builds";
+import postVercelBuild from "@/lib/functions/post-vercel-builds";
 
 export default async function handler(
   req: NextApiRequest,

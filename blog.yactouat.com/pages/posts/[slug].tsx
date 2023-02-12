@@ -4,8 +4,8 @@ import html from "remark-html";
 import { remark } from "remark";
 
 import Date from "@/components/date";
-import getAllPostsSlugs from "@/lib/get-all-posts-slugs";
-import { getPostData } from "@/lib/get-posts-data";
+import getAllPostsSlugs from "@/lib/functions/get-all-posts-slugs";
+import { getPostData } from "@/lib/functions/get-posts-data";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
