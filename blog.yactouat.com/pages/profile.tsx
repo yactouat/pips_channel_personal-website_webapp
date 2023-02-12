@@ -129,6 +129,9 @@ export default function Profile() {
         .finally(() => {
           setLoading(false);
         });
+    } else {
+      setLoading(false);
+      setErroring(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthToken]);
