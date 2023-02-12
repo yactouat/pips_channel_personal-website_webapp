@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 import { SocialHandleType } from "pips_resources_definitions/dist/types";
+import Modal from "@/components/modal/modal";
 
 const getUserId = () => {
   if (/^\d+$/.test(localStorage.getItem("userId") ?? "")) {
@@ -13,7 +14,7 @@ const getUserId = () => {
 };
 
 const getUserToken = () => {
-  return localStorage.getItem("userToken") ?? "";
+  return localStorage.getItem("userAuthToken") ?? "";
 };
 
 interface UserDataInterface {
@@ -28,7 +29,35 @@ export default function Profile() {
   const [title, setTitle] = useState("...loading");
   const [userData, setUserData] = useState(null);
 
+  const [verifEmail, setVerifEmail] = useState("");
+  const [verifToken, setVerifToken] = useState("");
+  const [verifUserId, setVerifUserId] = useState("");
+  const [isAccountVerifNavigated, setIsAccountVerifNavigated] = useState(false);
+
   useEffect(() => {
+    console.log(window.location.href);
+
+    // const urlParams = new URLSearchParams(window.location.search);
+    // urlParams.forEach((val, key) => {
+    //   console.log(key, val);
+    //   switch (key) {
+    //     case "email":
+    //       setVerifEmail(val);
+    //       break;
+    //     case "veriftoken":
+    //       setVerifToken(val);
+    //       break;
+    //     case "userid":
+    //       setVerifUserId(val);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   if (verifEmail && verifToken && verifUserId) {
+    //     setIsAccountVerifNavigated(true);
+    //   }
+    // });
+
     setLoading(true);
     fetch(
       process.env.NODE_ENV === "development"
@@ -91,6 +120,8 @@ export default function Profile() {
       {!isLoading && erroring && (
         <p>Sorry we have encountered an error, please try again later...</p>
       )}
+
+      {isAccountVerifNavigated && <Modal />}
     </MainLayout>
   );
 }

@@ -1,19 +1,31 @@
-.closeBtn {
-}
-
 .modal {
+  width: 450px;
+  min-height: 250px;
+  position: absolute;
+  top: 25%;
+  right: 50% - 450px;
+  z-index: 2;
+  border: 1px solid black;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.4rem;
-  width: 450px;
   padding: 1.3rem;
-  min-height: 250px;
-  position: absolute;
-  top: 20%;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 15px;
 }
 
-/* TODO rest of the modal following https://www.freecodecamp.org/news/how-to-build-a-modal-with-javascript/ */
+.modal p {
+  font-size: 0.9rem;
+  color: black;
+  margin: 0.4rem 0 0.2rem;
+}
+
+/* dark theme */
+@media (prefers-color-scheme: dark) {
+  .modal {
+    border: 1px solid white;
+    background-color: #000;
+  }
+  .modal p {
+    color: white;
+  }
+}

@@ -1,18 +1,14 @@
 import styles from "./modal.module.css";
-import utilStyles from "./../../styles/utils.module.css";
 
 const Modal = () => {
   return (
     <>
-      <section className={`${utilStyles.hidden} ${styles.modal}`}>
-        <div className={styles.flex}>
-          <button className={styles.btnClose}>⨉</button>
-        </div>
+      <section className={`${styles.modal}`}>
         <div>
           <p>modal works</p>
         </div>
       </section>
-      <div className="overlay hidden"></div>
+      <div className="overlay"></div>
     </>
   );
 };

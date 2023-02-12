@@ -1,15 +1,10 @@
 import Head from "next/head";
-import styles from "./main-layout.module.css";
-import utilStyles from "./../../styles/utils.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
-type AppPage = "home" | "profile";
-
-interface LayoutProps {
-  children: React.ReactNode;
-  page?: AppPage;
-}
+import styles from "./main-layout.module.css";
+import utilStyles from "./../../styles/utils.module.css";
+import MainLayoutProps from "./MainLayoutProps";
 
 const homeHeaderTitle = "yactouat's personal website";
 const profileHeaderTitle = "your private profile page";
@@ -18,7 +13,7 @@ export const siteTitle = "yactouat.com";
 export default function MainLayout({
   children,
   page: page = undefined,
-}: LayoutProps) {
+}: MainLayoutProps) {
   return (
     <>
       <Head>

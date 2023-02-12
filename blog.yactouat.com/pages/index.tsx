@@ -56,12 +56,10 @@ export default function Home({
         <meta name="description" content="yactouat's blog app'" />
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>
-          👋 I'm Yacine, and I'm a generalist web developer who is driven by
+        <p>{`👋 I'm Yacine, and I'm a generalist web developer who is driven by
           curiosity, positivity, and a can-do attitude; I like to design full
           stack solutions with various technologies, my objective is to have fun
-          while solving problems with code! Welcome to my personal website...
-        </p>
+          while solving problems with code! Welcome to my personal website...`}</p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         {list.length > 0 && (
