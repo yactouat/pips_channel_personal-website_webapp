@@ -86,6 +86,8 @@ export default function Profile() {
             setUserVerifModalText("Your profile has been verified !");
             setTimeout(() => {
               setIsAccountVerifNavigated(false);
+              setUserAuthToken(resPayload.token);
+              setUserId(verifUserId);
             }, 2000);
           }
         })
