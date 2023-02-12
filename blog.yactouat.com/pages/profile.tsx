@@ -73,6 +73,7 @@ export default function Profile() {
           verifToken: urlVerifToken,
         })
         .then((response) => {
+          console.log("verif response", response);
           if (response.data == null) {
             setErroring(true);
             setTitle("...error");
@@ -84,10 +85,11 @@ export default function Profile() {
             setUserVerifModalText("Your profile has been verified !");
             setTimeout(() => {
               setIsAccountVerifNavigated(false);
-            }, 1000);
+            }, 2000);
           }
         })
         .catch((err) => {
+          console.error(err);
           setErroring(true);
           setTitle("...error");
           setUserVerifModalText(
@@ -95,7 +97,7 @@ export default function Profile() {
           );
           setTimeout(() => {
             setIsAccountVerifNavigated(false);
-          }, 1000);
+          }, 2000);
         })
         .finally(() => {
           setLoading(false);
