@@ -74,14 +74,15 @@ export default function Profile() {
         })
         .then((response) => {
           console.log("verif response", response);
-          if (response.data == null) {
+          const resPayload = response.data.data;
+          if (resPayload == null) {
             setErroring(true);
             setTitle("...error");
           } else {
-            setUserData(response.data.user);
-            setTitle(response.data.user.email);
-            persistUserAuthToken(response.data.token);
-            persistUserId(response.data.user.id);
+            setUserData(resPayload.user);
+            setTitle(resPayload.user.email);
+            persistUserAuthToken(resPayload.token);
+            persistUserId(resPayload.user.id);
             setUserVerifModalText("Your profile has been verified !");
             setTimeout(() => {
               setIsAccountVerifNavigated(false);
