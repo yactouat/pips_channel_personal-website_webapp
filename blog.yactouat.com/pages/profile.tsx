@@ -1,10 +1,11 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
-import { SocialHandleType } from "pips_resources_definitions/dist/types";
 import Modal from "@/components/modal/modal";
+import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 
 const getUserId = () => {
   if (/^\d+$/.test(localStorage.getItem("userId") ?? "")) {
@@ -17,47 +18,22 @@ const getUserToken = () => {
   return localStorage.getItem("userAuthToken") ?? "";
 };
 
-interface UserDataInterface {
-  email: string;
-  socialhandle: string;
-  socialhandletype: SocialHandleType;
-}
-
 export default function Profile() {
   const [erroring, setErroring] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [title, setTitle] = useState("...loading");
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<null | UserProfileDataInterface>(
+    null
+  );
 
   const [verifEmail, setVerifEmail] = useState("");
   const [verifToken, setVerifToken] = useState("");
   const [verifUserId, setVerifUserId] = useState("");
   const [isAccountVerifNavigated, setIsAccountVerifNavigated] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
-    console.log(window.location.href);
-
-    // const urlParams = new URLSearchParams(window.location.search);
-    // urlParams.forEach((val, key) => {
-    //   console.log(key, val);
-    //   switch (key) {
-    //     case "email":
-    //       setVerifEmail(val);
-    //       break;
-    //     case "veriftoken":
-    //       setVerifToken(val);
-    //       break;
-    //     case "userid":
-    //       setVerifUserId(val);
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    //   if (verifEmail && verifToken && verifUserId) {
-    //     setIsAccountVerifNavigated(true);
-    //   }
-    // });
-
     setLoading(true);
     fetch(
       process.env.NODE_ENV === "development"
@@ -88,6 +64,36 @@ export default function Profile() {
       });
   }, []);
 
+  useEffect(() => {
+    // const searchParams = new URLSearchParams(
+    //   window.location.href.substring(
+    //     window.location.href.lastIndexOf("profile?") + 8
+    //   )
+    // );
+    console.log(router.query);
+
+    // const urlParams = new URLSearchParams(window.location.search);
+    // urlParams.forEach((val, key) => {
+    //   console.log(key, val);
+    //   switch (key) {
+    //     case "email":
+    //       setVerifEmail(val);
+    //       break;
+    //     case "veriftoken":
+    //       setVerifToken(val);
+    //       break;
+    //     case "userid":
+    //       setVerifUserId(val);
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    //   if (verifEmail && verifToken && verifUserId) {
+    //     setIsAccountVerifNavigated(true);
+    //   }
+    // });
+  }, [router.query]);
+
   return (
     <MainLayout page="profile">
       <Head>
@@ -108,10 +114,10 @@ export default function Profile() {
           </p>
           <hr />
           <h2>your personal data</h2>
-          <p>email: {(userData as UserDataInterface).email}</p>
+          <p>email: {userData.email}</p>
           <p>
-            social handle: <b>{(userData as UserDataInterface).socialhandle}</b>{" "}
-            on <b>{(userData as UserDataInterface).socialhandletype}</b>
+            social handle: <b>{userData.socialhandle}</b> on{" "}
+            <b>{userData.socialhandletype}</b>
           </p>
           <hr />
         </section>

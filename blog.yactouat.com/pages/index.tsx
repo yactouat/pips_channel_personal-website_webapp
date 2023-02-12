@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 import Date from "@/components/date";
-import { getPostsMetadata } from "@/lib/get-posts-data";
+import { getPostsMetadata } from "@/lib/functions/get-posts-data";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import utilStyles from "@/styles/utils.module.css";
 
