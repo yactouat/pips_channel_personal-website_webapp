@@ -15,6 +15,9 @@ const ProfileData = ({ userData }: { userData: UserProfileDataInterface }) => {
         social handle: <b>{userData.socialhandle}</b> on{" "}
         <b>{userData.socialhandletype}</b>
       </p>
+      <p>
+        profile is verified: <b>{userData.verified ? "✅" : "❌"}</b>
+      </p>
       <hr />
     </section>
   );
