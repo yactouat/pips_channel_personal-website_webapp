@@ -10,9 +10,9 @@ import {
   persistUserCredentials,
 } from "@/lib/functions/localStorage";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
-import Modal from "@/components/modal/modal";
+import Modal from "@/modules/modal/modal";
 import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
-import ProfileData from "@/components/profile-data";
+import ReadProfileData from "@/components/profile-data/read-profile-data";
 
 const usersApiEndpoint =
   process.env.NODE_ENV === "development"
@@ -47,23 +47,33 @@ export default function Profile() {
 
   // parsing verification token navigation
   useEffect(() => {
-    const verifUserId = router.query.userid as string;
+    let verifEmail;
+    let urlVerifToken;
+    let verifUserId: string;
+    if (process.env.NODE_ENV === "development") {
+      const queryStrings = new URL(window.location.href).searchParams;
+      urlVerifToken = queryStrings.get("veriftoken") as string;
+      verifEmail = queryStrings.get("email") as string;
+      verifUserId = queryStrings.get("userid") as string;
+    } else {
+      urlVerifToken = router.query.veriftoken as string;
+      verifEmail = router.query.email as string;
+      verifUserId = router.query.userid as string;
+    }
     if (
-      router.query.email != null &&
-      router.query.veriftoken != null &&
-      router.query.userid != null &&
+      verifEmail != null &&
+      urlVerifToken != null &&
+      verifUserId != null &&
       /^\d+$/.test(verifUserId)
     ) {
       setIsModalOpen(true);
-      const verifEmail = router.query.email as string;
-      const urlVerifToken = router.query.veriftoken as string;
       axios
         .put(`${usersApiEndpoint}${verifUserId}`, {
           email: verifEmail,
           verifToken: urlVerifToken,
         })
         .then((response) => {
-          console.log("verif response", response);
+          console.info("VERIF USER", response.data);
           const resPayload = response.data.data;
           if (resPayload == null) {
             setHtmlTitle("...error");
@@ -85,7 +95,6 @@ export default function Profile() {
           );
           setFeedbackOutput(errorOutput);
           setHtmlTitle("...error");
-          deletePersistedUserData();
         })
         .finally(() => {
           setIsLoading(false);
@@ -129,7 +138,6 @@ export default function Profile() {
       setHtmlTitle("...error");
       setFeedbackOutput(errorOutput);
       setIsLoading(false);
-      deletePersistedUserData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAuthToken]);
@@ -146,7 +154,9 @@ export default function Profile() {
       </Head>
       {(isLoading || !userData) && <p>{feedbackOutput}</p>}
 
-      {!isLoading && userData != null && <ProfileData userData={userData} />}
+      {!isLoading && userData != null && (
+        <ReadProfileData userData={userData} />
+      )}
 
       {isModalOpen && (
         <Modal>

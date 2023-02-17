@@ -11,6 +11,14 @@ body {
   padding: 0;
 }
 
+/* buttons */
+.editable::after {
+  content: url("/icons/edit.svg");
+  margin-left: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
 /* images */
 img {
   max-width: 100%;
