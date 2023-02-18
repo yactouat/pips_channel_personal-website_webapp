@@ -11,8 +11,9 @@ import {
 } from "@/lib/functions/localStorage";
 import MainLayout, { siteTitle } from "@/components/main-layout/main-layout";
 import Modal from "@/modules/modal/modal";
-import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 import ReadProfileData from "@/components/profile-data/read-profile-data";
+import EditProfileData from "@/components/profile-data/edit-profile-data";
+import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 
 const usersApiEndpoint =
   process.env.NODE_ENV === "development"
@@ -26,6 +27,7 @@ export default function Profile() {
   const router = useRouter();
 
   const [htmlTitle, setHtmlTitle] = useState("...loading");
+  const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackOutput, setFeedbackOutput] = useState(loadingOutput);
@@ -38,6 +40,10 @@ export default function Profile() {
     null
   );
   const [userId, setUserId] = useState<null | string>(null);
+
+  const toggleEditMode = (): void => {
+    setIsEditMode((prevState) => !prevState);
+  };
 
   // checking if there is a persisted user auth token and user id at page load
   useEffect(() => {
@@ -145,7 +151,6 @@ export default function Profile() {
   return (
     <MainLayout page="profile">
       <Head>
-        {/* TODO show actual user email */}
         <title>
           {htmlTitle} | {siteTitle} Profile
         </title>
@@ -154,8 +159,12 @@ export default function Profile() {
       </Head>
       {(isLoading || !userData) && <p>{feedbackOutput}</p>}
 
-      {!isLoading && userData != null && (
-        <ReadProfileData userData={userData} />
+      {!isLoading && userData != null && !isEditMode && (
+        <ReadProfileData userData={userData} toggleEditMode={toggleEditMode} />
+      )}
+
+      {!isLoading && userData != null && isEditMode && (
+        <EditProfileData userData={userData} toggleEditMode={toggleEditMode} />
       )}
 
       {isModalOpen && (

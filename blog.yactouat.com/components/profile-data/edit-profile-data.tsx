@@ -2,7 +2,7 @@ import styles from "./profile-data.module.css";
 import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 import utilStyles from "@/styles/utils.module.css";
 
-const ReadProfileData = ({
+const EditProfileData = ({
   userData,
   toggleEditMode,
 }: {
@@ -13,7 +13,7 @@ const ReadProfileData = ({
     <section className={`${utilStyles.headingMd}`}>
       <hr />
       <h2 className={styles.h2}>
-        your personal profile data{" "}
+        edit your personal profile data{" "}
         <span className="editable" onClick={toggleEditMode}>
           {" "}
         </span>
@@ -23,18 +23,10 @@ const ReadProfileData = ({
         social handle: <b>{userData.socialhandle}</b> on{" "}
         <b>{userData.socialhandletype}</b>
       </p>
-      <p>
-        profile is verified: <b>{userData.verified ? "✅" : "❌"}</b>
-        {!userData.verified && (
-          <p>
-            ⚠️ please click on the verification link sent to your mailbox to
-            verify your profile
-          </p>
-        )}
-      </p>
+      {/* TODO add relevant form here */}
       <hr />
     </section>
   );
 };
 
-export default ReadProfileData;
+export default EditProfileData;
