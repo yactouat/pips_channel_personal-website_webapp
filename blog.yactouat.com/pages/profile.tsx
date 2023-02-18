@@ -21,6 +21,7 @@ const usersApiEndpoint =
     : `https://api.yactouat.com/users/`;
 
 const errorOutput = "Sorry, we could not fetch your profile data...";
+const errorTitle = "...error";
 const loadingOutput = "Loading...";
 
 export default function Profile() {
@@ -41,20 +42,24 @@ export default function Profile() {
   );
   const [userId, setUserId] = useState<null | string>(null);
 
+  const getAuthHeaders = () => {
+    return {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuthToken}`,
+      },
+    };
+  };
+
   const signUserIn = (): void => {
     axios
-      .get(`${usersApiEndpoint}${userId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userAuthToken}`,
-        },
-      })
+      .get(`${usersApiEndpoint}${userId}`, getAuthHeaders())
       .then((response) => {
         const resPayload = response.data.data;
         console.log(resPayload);
         if (resPayload == null) {
           setFeedbackOutput(errorOutput);
-          setHtmlTitle("...error");
+          setHtmlTitle(errorTitle);
         } else {
           setHtmlTitle(resPayload.email);
           setUserData(resPayload);
@@ -62,7 +67,7 @@ export default function Profile() {
       })
       .catch((err) => {
         setFeedbackOutput(errorOutput);
-        setHtmlTitle("...error");
+        setHtmlTitle(errorTitle);
         deletePersistedUserData();
       })
       .finally(() => {
@@ -77,9 +82,40 @@ export default function Profile() {
   const updateUserProfile = (
     updatedUserData: UserProfileDataInterface
   ): void => {
-    // TODO
-    console.log("updateUserProfile", updatedUserData);
-    // TODO toggle edit mode off at the end
+    setIsModalOpen(true);
+    axios
+      .put(`${usersApiEndpoint}${userId}`, updatedUserData, getAuthHeaders())
+      .then((response) => {
+        console.info("UPDATE USER", response.data);
+        const resPayload = response.data.data;
+        if (resPayload == null) {
+          setHtmlTitle(errorTitle);
+          setFeedbackOutput(
+            "Sorry, we could not verify your profile, please try again later..."
+          );
+        } else {
+          setModalText("Your profile has been updated !");
+          persistUserCredentials(resPayload.token, resPayload.user.id);
+          setFeedbackOutput(loadingOutput);
+          setUserAuthToken(resPayload.token);
+          setUserData(resPayload.user);
+          toggleEditMode();
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setModalText(
+          "Sorry, we could not update your profile, please try again later..."
+        );
+        setFeedbackOutput(errorOutput);
+        setHtmlTitle(errorTitle);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsModalOpen(false);
+        }, 2000);
+      });
   };
 
   const verifyUserProfile = (
@@ -89,16 +125,16 @@ export default function Profile() {
   ): void => {
     setIsModalOpen(true);
     axios
-      .put(`${usersApiEndpoint}${verifUserId}`, {
+      .put(`${usersApiEndpoint}${verifUserId}/verify`, {
         email: verifEmail,
-        verifToken: urlVerifToken,
+        veriftoken: urlVerifToken,
       })
       .then((response) => {
         console.info("VERIF USER", response.data);
         const resPayload = response.data.data;
         if (resPayload == null) {
-          setHtmlTitle("...error");
-          setFeedbackOutput(loadingOutput);
+          setHtmlTitle(errorTitle);
+          setFeedbackOutput(errorOutput);
         } else {
           setModalText("Your profile has been verified !");
           persistUserCredentials(resPayload.token, resPayload.user.id);
@@ -115,7 +151,7 @@ export default function Profile() {
           "Sorry, we could not verify your profile, please try again later..."
         );
         setFeedbackOutput(errorOutput);
-        setHtmlTitle("...error");
+        setHtmlTitle(errorTitle);
       })
       .finally(() => {
         setIsLoading(false);
@@ -161,7 +197,7 @@ export default function Profile() {
       // auto sign in
       signUserIn();
     } else if (!userData) {
-      setHtmlTitle("...error");
+      setHtmlTitle(errorTitle);
       setFeedbackOutput(errorOutput);
       setIsLoading(false);
     }

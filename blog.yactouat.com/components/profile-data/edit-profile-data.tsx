@@ -35,12 +35,12 @@ const EditProfileData = ({
       <hr />
       <h2 className={styles.h2}>
         edit your personal profile data{" "}
-        <span className="editable" onClick={toggleEditMode}>
+        <span className="readable" onClick={toggleEditMode}>
           {" "}
         </span>
       </h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method="POST">
         <div className={styles.field}>
           <span className={utilStyles.marginRight}>email:</span>{" "}
           <input

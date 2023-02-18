@@ -20,6 +20,12 @@ body {
   margin-right: 4px;
   cursor: pointer;
 }
+.readable::after {
+  content: url("/icons/read.svg");
+  margin-left: 4px;
+  margin-right: 4px;
+  cursor: pointer;
+}
 input[type="submit"] {
   cursor: pointer;
 }
