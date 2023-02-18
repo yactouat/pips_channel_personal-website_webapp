@@ -49,17 +49,26 @@
 }
 
 /* spacing */
+.marginBottom {
+  margin-bottom: var(--spacing-unit);
+}
 .marginRight {
   margin-right: 8px;
 }
 .marginTop {
-  margin-top: 4px;
+  margin-top: var(--spacing-unit);
 }
 .padding {
-  padding: 4px;
+  padding: var(--spacing-unit);
 }
 .paddingTop {
   padding-top: 1px;
+}
+
+/* text styling */
+.largerText {
+  font-size: 1.2rem;
+  line-height: 1.5;
 }
 
 /* visibility, display, opacity, overlays etc. */

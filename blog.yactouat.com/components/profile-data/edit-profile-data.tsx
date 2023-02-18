@@ -77,7 +77,11 @@ const EditProfileData = ({
           </p>
         </div>
 
-        <input type="submit" value="save" className={utilStyles.padding} />
+        <input
+          type="submit"
+          value="save"
+          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottom}`}
+        />
       </form>
 
       <hr />
