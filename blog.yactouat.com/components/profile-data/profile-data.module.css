@@ -1,3 +1,8 @@
 .h2 {
   text-decoration: underline;
 }
+
+.field {
+  display: flex;
+  align-items: center;
+}

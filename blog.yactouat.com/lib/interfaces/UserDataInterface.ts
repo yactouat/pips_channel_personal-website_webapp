@@ -4,7 +4,7 @@ interface UserProfileDataInterface {
   email: string;
   socialhandle: string;
   socialhandletype: SocialHandleType;
-  verified: boolean;
+  verified?: boolean;
 }
 
 export default UserProfileDataInterface;

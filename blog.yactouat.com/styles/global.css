@@ -11,11 +11,14 @@ body {
   padding: 0;
 }
 
-/* buttons */
+/* buttons and inputs */
 .editable::after {
   content: url("/icons/edit.svg");
   margin-left: 4px;
   margin-right: 4px;
+  cursor: pointer;
+}
+input[type="submit"] {
   cursor: pointer;
 }
 

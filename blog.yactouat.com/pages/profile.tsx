@@ -41,8 +41,88 @@ export default function Profile() {
   );
   const [userId, setUserId] = useState<null | string>(null);
 
+  const signUserIn = (): void => {
+    axios
+      .get(`${usersApiEndpoint}${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userAuthToken}`,
+        },
+      })
+      .then((response) => {
+        const resPayload = response.data.data;
+        console.log(resPayload);
+        if (resPayload == null) {
+          setFeedbackOutput(errorOutput);
+          setHtmlTitle("...error");
+        } else {
+          setHtmlTitle(resPayload.email);
+          setUserData(resPayload);
+        }
+      })
+      .catch((err) => {
+        setFeedbackOutput(errorOutput);
+        setHtmlTitle("...error");
+        deletePersistedUserData();
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   const toggleEditMode = (): void => {
     setIsEditMode((prevState) => !prevState);
+  };
+
+  const updateUserProfile = (
+    updatedUserData: UserProfileDataInterface
+  ): void => {
+    // TODO
+    console.log("updateUserProfile", updatedUserData);
+    // TODO toggle edit mode off at the end
+  };
+
+  const verifyUserProfile = (
+    verifUserId: string,
+    verifEmail: string,
+    urlVerifToken: string
+  ): void => {
+    setIsModalOpen(true);
+    axios
+      .put(`${usersApiEndpoint}${verifUserId}`, {
+        email: verifEmail,
+        verifToken: urlVerifToken,
+      })
+      .then((response) => {
+        console.info("VERIF USER", response.data);
+        const resPayload = response.data.data;
+        if (resPayload == null) {
+          setHtmlTitle("...error");
+          setFeedbackOutput(loadingOutput);
+        } else {
+          setModalText("Your profile has been verified !");
+          persistUserCredentials(resPayload.token, resPayload.user.id);
+          setHtmlTitle(resPayload.user.email);
+          setFeedbackOutput(loadingOutput);
+          setUserAuthToken(resPayload.token);
+          setUserId(verifUserId);
+          setUserData(resPayload.user);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setModalText(
+          "Sorry, we could not verify your profile, please try again later..."
+        );
+        setFeedbackOutput(errorOutput);
+        setHtmlTitle("...error");
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsModalOpen(false);
+        }, 2000);
+      });
   };
 
   // checking if there is a persisted user auth token and user id at page load
@@ -72,74 +152,14 @@ export default function Profile() {
       verifUserId != null &&
       /^\d+$/.test(verifUserId)
     ) {
-      setIsModalOpen(true);
-      axios
-        .put(`${usersApiEndpoint}${verifUserId}`, {
-          email: verifEmail,
-          verifToken: urlVerifToken,
-        })
-        .then((response) => {
-          console.info("VERIF USER", response.data);
-          const resPayload = response.data.data;
-          if (resPayload == null) {
-            setHtmlTitle("...error");
-            setFeedbackOutput(loadingOutput);
-          } else {
-            setModalText("Your profile has been verified !");
-            persistUserCredentials(resPayload.token, resPayload.user.id);
-            setHtmlTitle(resPayload.user.email);
-            setFeedbackOutput(loadingOutput);
-            setUserAuthToken(resPayload.token);
-            setUserId(verifUserId);
-            setUserData(resPayload.user);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          setModalText(
-            "Sorry, we could not verify your profile, please try again later..."
-          );
-          setFeedbackOutput(errorOutput);
-          setHtmlTitle("...error");
-        })
-        .finally(() => {
-          setIsLoading(false);
-          setTimeout(() => {
-            setIsModalOpen(false);
-          }, 2000);
-        });
+      verifyUserProfile(verifUserId, verifEmail, urlVerifToken);
     }
   }, [router.query]);
 
   useEffect(() => {
     if (userAuthToken && userId && !userData) {
       // auto sign in
-      axios
-        .get(`${usersApiEndpoint}${userId}`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userAuthToken}`,
-          },
-        })
-        .then((response) => {
-          const resPayload = response.data.data;
-          console.log(resPayload);
-          if (resPayload == null) {
-            setFeedbackOutput(errorOutput);
-            setHtmlTitle("...error");
-          } else {
-            setHtmlTitle(resPayload.email);
-            setUserData(resPayload);
-          }
-        })
-        .catch((err) => {
-          setFeedbackOutput(errorOutput);
-          setHtmlTitle("...error");
-          deletePersistedUserData();
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      signUserIn();
     } else if (!userData) {
       setHtmlTitle("...error");
       setFeedbackOutput(errorOutput);
@@ -164,7 +184,11 @@ export default function Profile() {
       )}
 
       {!isLoading && userData != null && isEditMode && (
-        <EditProfileData userData={userData} toggleEditMode={toggleEditMode} />
+        <EditProfileData
+          toggleEditMode={toggleEditMode}
+          updateUserProfile={updateUserProfile}
+          userData={userData}
+        />
       )}
 
       {isModalOpen && (

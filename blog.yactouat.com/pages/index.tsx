@@ -61,7 +61,7 @@ export default function Home({
           stack solutions with various technologies, my objective is to have fun
           while solving problems with code! Welcome to my personal website...`}</p>
       </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      <section className={`${utilStyles.headingMd} ${utilStyles.paddingTop}`}>
         {list.length > 0 && (
           <h2 className={utilStyles.headingLg}>Latest posts</h2>
         )}

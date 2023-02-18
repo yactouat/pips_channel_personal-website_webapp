@@ -49,7 +49,16 @@
 }
 
 /* spacing */
-.padding1px {
+.marginRight {
+  margin-right: 8px;
+}
+.marginTop {
+  margin-top: 4px;
+}
+.padding {
+  padding: 4px;
+}
+.paddingTop {
   padding-top: 1px;
 }
 
