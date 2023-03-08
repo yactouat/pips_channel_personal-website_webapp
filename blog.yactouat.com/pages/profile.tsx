@@ -94,7 +94,9 @@ export default function Profile() {
             "Sorry, we could not verify your profile, please try again later..."
           );
         } else {
-          setModalText("Your profile has been updated !");
+          setModalText(
+            "Your profile has been updated ! some email confirmation may be required"
+          );
           persistUserCredentials(resPayload.token, resPayload.user.id);
           setFeedbackOutput(loadingOutput);
           setUserAuthToken(resPayload.token);
@@ -118,37 +120,38 @@ export default function Profile() {
       });
   };
 
+  // the "verification" in question as a confirmation of some sensitive data change, this happens via email link
   const verifyUserProfile = (
-    verifUserId: string,
-    verifEmail: string,
-    urlVerifToken: string
+    urlUserId: string,
+    urlEmail: string,
+    urlToken: string,
+    modtype: "veriftoken" | "modifytoken"
   ): void => {
     setIsModalOpen(true);
     axios
-      .put(`${usersApiEndpoint}${verifUserId}/verify`, {
-        email: verifEmail,
-        veriftoken: urlVerifToken,
+      .put(`${usersApiEndpoint}${urlUserId}/verify`, {
+        email: urlEmail,
+        [modtype]: urlToken,
       })
       .then((response) => {
-        console.info("VERIF USER", response.data);
         const resPayload = response.data.data;
         if (resPayload == null) {
           setHtmlTitle(errorTitle);
           setFeedbackOutput(errorOutput);
         } else {
-          setModalText("Your profile has been verified !");
+          setModalText("Your profile has been updated !");
           persistUserCredentials(resPayload.token, resPayload.user.id);
           setHtmlTitle(resPayload.user.email);
           setFeedbackOutput(loadingOutput);
           setUserAuthToken(resPayload.token);
-          setUserId(verifUserId);
+          setUserId(urlUserId);
           setUserData(resPayload.user);
         }
       })
       .catch((err) => {
-        console.error(err);
+        console.error("ERROR ON VERIFY", err);
         setModalText(
-          "Sorry, we could not verify your profile, please try again later..."
+          "Sorry, we could not update your profile, please try again later..."
         );
         setFeedbackOutput(errorOutput);
         setHtmlTitle(errorTitle);
@@ -169,26 +172,33 @@ export default function Profile() {
 
   // parsing verification token navigation
   useEffect(() => {
-    let verifEmail;
-    let urlVerifToken;
-    let verifUserId: string;
+    let urlEmail;
+    let urlToken;
+    let urlUserId: string;
+    let modType: "veriftoken" | "modifytoken";
     if (process.env.NODE_ENV === "development") {
       const queryStrings = new URL(window.location.href).searchParams;
-      urlVerifToken = queryStrings.get("veriftoken") as string;
-      verifEmail = queryStrings.get("email") as string;
-      verifUserId = queryStrings.get("userid") as string;
+      urlToken = queryStrings.get("veriftoken")
+        ? (queryStrings.get("veriftoken") as string)
+        : (queryStrings.get("modifytoken") as string);
+      modType = queryStrings.get("veriftoken") ? "veriftoken" : "modifytoken";
+      urlEmail = queryStrings.get("email") as string;
+      urlUserId = queryStrings.get("userid") as string;
     } else {
-      urlVerifToken = router.query.veriftoken as string;
-      verifEmail = router.query.email as string;
-      verifUserId = router.query.userid as string;
+      urlToken = router.query.veriftoken
+        ? (router.query.veriftoken as string)
+        : (router.query.modifytoken as string);
+      modType = router.query.veriftoken ? "veriftoken" : "modifytoken";
+      urlEmail = router.query.email as string;
+      urlUserId = router.query.userid as string;
     }
     if (
-      verifEmail != null &&
-      urlVerifToken != null &&
-      verifUserId != null &&
-      /^\d+$/.test(verifUserId)
+      urlEmail != null &&
+      urlToken != null &&
+      urlUserId != null &&
+      /^\d+$/.test(urlUserId)
     ) {
-      verifyUserProfile(verifUserId, verifEmail, urlVerifToken);
+      verifyUserProfile(urlUserId, urlEmail, urlToken, modType);
     }
   }, [router.query]);
 
