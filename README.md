@@ -18,7 +18,9 @@
 
 ## what is this ?
 
-the client-side code that powers my personal website API, feel free to use this as a template for your own blog
+the client-side code that powers my personal website API, part of my PIPS (Portable Integrated Personal System) feel free to use this as a template for your own blog
+
+it works by triggering its own builds when it receives a PubSub message from the PIPS system, that tells it that a new post has been published; it then fetches the latest posts from the API and builds the site in SSG mode
 
 ## resources and endpoints
 
@@ -30,13 +32,15 @@ the client-side code that powers my personal website API, feel free to use this 
 
 ### web app'
 
-- `/` : the home page
+- `/` : the home page, with the blog posts list
 - `/posts/:slug` : the given post by slug or 404
+- `profile` : your user profile page
 
 ## pre requisites
 
 - [Node.js](https://nodejs.org/en/) >= 10.13
 - [Typescript](https://www.typescriptlang.org/)
+- this frontend app' is meant to be used with <https://github.com/yactouat/pips_channel_personal-website_api>
 
 ## how to run
 
@@ -62,7 +66,7 @@ as matter of fact, the `/api/builds` endpoint is a webhook that triggers a build
 - a Google Pub Sub push subscription sent to your live `api/builds` endpoint
 - a `PUBSUB_TOKEN_AUDIENCE` environment variable set on your Vercel deployment to the audience of the token you'll receive from Google PubSub
 - a `PUBSUB_TOKEN_EMAIL` environment variable set to the email of the Google service account that is sending the push subscription message
-- a `VERCEL_PROJECT` and a `VERCEL_TOKEN` environment variable set to a Vercel API token
+- a `VERCEL_PROJECT` and a `VERCEL_TOKEN` environment variable are set to be able to talk the Vercel API
 
 ## contribution guidelines
 
