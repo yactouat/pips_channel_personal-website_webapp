@@ -129,7 +129,7 @@ export default function Profile() {
   ): void => {
     setIsModalOpen(true);
     axios
-      .put(`${usersApiEndpoint}${urlUserId}/verify`, {
+      .put(`${usersApiEndpoint}${urlUserId}/process-token`, {
         email: urlEmail,
         [modtype]: urlToken,
       })
