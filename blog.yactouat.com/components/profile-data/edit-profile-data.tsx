@@ -32,11 +32,7 @@ const EditProfileData = ({
     if (password != "") {
       updatePayload.password = password;
     }
-    updateUserProfile({
-      email: userEmail,
-      socialhandle: userSocialHandle,
-      socialhandletype: userSocialHandleType,
-    });
+    updateUserProfile(updatePayload);
   };
 
   return (
