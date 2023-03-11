@@ -37,7 +37,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackOutput, setFeedbackOutput] = useState(loadingOutput);
   const [modalText, setModalText] = useState(
-    "Please wait while we are verifying your profile..."
+    "Please wait while we are checking your profile..."
   );
 
   const [userAuthToken, setUserAuthToken] = useState<null | string>(null);
@@ -72,6 +72,9 @@ export default function Profile() {
           setUserAuthToken(resPayload.token);
           setUserId(urlUserId);
           setUserData(resPayload.user);
+          setUserHasPendingModifications(
+            resPayload.user.hasPendingModifications
+          );
         }
       })
       .catch((err) => {
