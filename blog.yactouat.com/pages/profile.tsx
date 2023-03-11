@@ -94,9 +94,12 @@ export default function Profile() {
             "Sorry, we could not verify your profile, please try again later..."
           );
         } else {
-          setModalText(
-            "Your profile has been updated ! some email confirmation may be required"
-          );
+          let feedbackText = "Your profile has been updated !";
+          if (updatedUserData.email !== userData?.email) {
+            feedbackText =
+              "Your profile has been updated ! some email confirmation may be required";
+          }
+          setModalText(feedbackText);
           persistUserCredentials(resPayload.token, resPayload.user.id);
           setFeedbackOutput(loadingOutput);
           setUserAuthToken(resPayload.token);
