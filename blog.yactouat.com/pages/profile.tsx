@@ -44,6 +44,8 @@ export default function Profile() {
   const [userData, setUserData] = useState<null | UserProfileDataInterface>(
     null
   );
+  const [userHasPendingModifications, setUserHasPendingModifications] =
+    useState(false);
   const [userId, setUserId] = useState<null | string>(null);
 
   const confirmUserProfileModToken = (
@@ -107,6 +109,10 @@ export default function Profile() {
           const resPayload = response.data.data;
           setHtmlTitle(resPayload.email);
           setUserData(resPayload);
+          console.info("FETCHED USER PROFILE", resPayload);
+          if (resPayload.hasPendingModifications == true) {
+            setUserHasPendingModifications(true);
+          }
         }
       })
       .catch((err) => {
@@ -144,6 +150,7 @@ export default function Profile() {
           ) {
             feedbackText =
               "Your profile has been updated ! some email confirmation may be required";
+            setUserHasPendingModifications(true);
           }
           setModalText(feedbackText);
           persistUserCredentials(resPayload.token, resPayload.user.id);
@@ -207,6 +214,7 @@ export default function Profile() {
     }
   }, [router.query]);
 
+  // signing user in on setting the auth token in the component state
   useEffect(() => {
     if (userAuthToken && userId && !userData) {
       // auto sign in
@@ -239,6 +247,7 @@ export default function Profile() {
           toggleEditMode={toggleEditMode}
           updateUserProfile={updateUserProfile}
           userData={userData}
+          userHasPendingModifications={userHasPendingModifications}
         />
       )}
 

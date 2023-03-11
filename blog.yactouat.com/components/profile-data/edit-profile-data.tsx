@@ -8,10 +8,12 @@ const EditProfileData = ({
   toggleEditMode,
   updateUserProfile,
   userData,
+  userHasPendingModifications,
 }: {
   toggleEditMode: () => void;
   updateUserProfile: (updatedUserData: UserProfileDataInterface) => void;
   userData: UserProfileDataInterface;
+  userHasPendingModifications: boolean;
 }) => {
   const [userEmail, setUserEmail] = useState(userData.email);
   const [password, setPassword] = useState("");
@@ -105,11 +107,22 @@ const EditProfileData = ({
         <input
           type="submit"
           value="save"
-          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottom} ${utilStyles.marginTopX2}`}
+          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottomX2} ${utilStyles.marginTopX2}`}
         />
       </form>
 
       <hr />
+
+      {userHasPendingModifications && (
+        <>
+          <p>
+            ⚠️ your profile has pending modifications that require to be
+            confirmed by email
+          </p>
+
+          <hr />
+        </>
+      )}
     </section>
   );
 };
