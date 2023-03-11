@@ -14,7 +14,11 @@ const ReadProfileData = ({
       <hr />
       <h2 className={styles.h2}>
         your personal profile data{" "}
-        <span className="editable" onClick={toggleEditMode}>
+        <span
+          className="editable"
+          onClick={toggleEditMode}
+          title="edit profile data"
+        >
           {" "}
         </span>
       </h2>

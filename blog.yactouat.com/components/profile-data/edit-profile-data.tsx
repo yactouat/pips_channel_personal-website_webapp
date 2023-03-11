@@ -14,6 +14,7 @@ const EditProfileData = ({
   userData: UserProfileDataInterface;
 }) => {
   const [userEmail, setUserEmail] = useState(userData.email);
+  const [password, setPassword] = useState("");
   const [userSocialHandle, setUserSocialHandle] = useState(
     userData.socialhandle
   );
@@ -23,6 +24,14 @@ const EditProfileData = ({
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
+    let updatePayload: UserProfileDataInterface = {
+      email: userEmail,
+      socialhandle: userSocialHandle,
+      socialhandletype: userSocialHandleType,
+    };
+    if (password != "") {
+      updatePayload.password = password;
+    }
     updateUserProfile({
       email: userEmail,
       socialhandle: userSocialHandle,
@@ -35,13 +44,17 @@ const EditProfileData = ({
       <hr />
       <h2 className={styles.h2}>
         edit your personal profile data{" "}
-        <span className="readable" onClick={toggleEditMode}>
+        <span
+          className="readable"
+          onClick={toggleEditMode}
+          title="read profile data"
+        >
           {" "}
         </span>
       </h2>
 
       <form onSubmit={handleSubmit} method="POST">
-        <div className={styles.field}>
+        <div className={`${styles.field}`}>
           <span className={utilStyles.marginRight}>email:</span>{" "}
           <input
             className={utilStyles.padding}
@@ -77,10 +90,26 @@ const EditProfileData = ({
           </p>
         </div>
 
+        <div className={styles.field}>
+          <span className={utilStyles.marginRight}>password:</span>{" "}
+          <input
+            className={utilStyles.padding}
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            value={password}
+          />
+        </div>
+        <p className={`${utilStyles.smallerText}`}>
+          ⚠️ password not shown for safety reasons - ⚠️ password should be 8
+          characters or longer, and should contain at least 1 number, 1
+          uppercase letter and 1 lowercase letter
+        </p>
+
         <input
           type="submit"
           value="save"
-          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottom}`}
+          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottom} ${utilStyles.marginTopX2}`}
         />
       </form>
 

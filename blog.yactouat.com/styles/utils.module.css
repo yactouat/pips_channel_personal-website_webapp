@@ -52,11 +52,17 @@
 .marginBottom {
   margin-bottom: var(--spacing-unit);
 }
+.marginBottomX2 {
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}
 .marginRight {
   margin-right: 8px;
 }
 .marginTop {
   margin-top: var(--spacing-unit);
+}
+.marginTopX2 {
+  margin-top: calc(var(--spacing-unit) * 2);
 }
 .padding {
   padding: var(--spacing-unit);
@@ -69,6 +75,10 @@
 .largerText {
   font-size: 1.2rem;
   line-height: 1.5;
+}
+.smallerText {
+  font-size: 0.8rem;
+  line-height: 1;
 }
 
 /* visibility, display, opacity, overlays etc. */

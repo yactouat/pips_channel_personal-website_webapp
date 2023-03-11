@@ -20,9 +20,13 @@ const usersApiEndpoint =
     ? `http://localhost:8080/users/`
     : `https://api.yactouat.com/users/`;
 
-const errorOutput = "Sorry, we could not fetch your profile data...";
+const couldNotUpdateProfileDataTxt =
+  "Sorry, we could not update your profile, please try again later...";
 const errorTitle = "...error";
+const fetchProfileDataErrorTxt =
+  "Sorry, we could not fetch your profile data...";
 const loadingOutput = "Loading...";
+const profileUpdatedText = "Your profile has been updated !";
 
 export default function Profile() {
   const router = useRouter();
@@ -42,6 +46,48 @@ export default function Profile() {
   );
   const [userId, setUserId] = useState<null | string>(null);
 
+  const confirmUserProfileModToken = (
+    urlUserId: string,
+    urlEmail: string,
+    urlToken: string,
+    modtype: "veriftoken" | "modifytoken"
+  ): void => {
+    setIsModalOpen(true);
+    let userProfileModConfirmed = false;
+    axios
+      .put(`${usersApiEndpoint}${urlUserId}/process-token`, {
+        email: urlEmail,
+        [modtype]: urlToken,
+      })
+      .then((response) => {
+        userProfileModConfirmed = response.status === 200;
+        if (userProfileModConfirmed) {
+          const resPayload = response.data.data;
+          setModalText(profileUpdatedText);
+          persistUserCredentials(resPayload.token, resPayload.user.id);
+          setHtmlTitle(resPayload.user.email);
+          setFeedbackOutput(loadingOutput);
+          setUserAuthToken(resPayload.token);
+          setUserId(urlUserId);
+          setUserData(resPayload.user);
+        }
+      })
+      .catch((err) => {
+        console.error("ERROR ON CONFIRMING USED PROFILE MOD", err);
+      })
+      .finally(() => {
+        if (!userProfileModConfirmed) {
+          setModalText(couldNotUpdateProfileDataTxt);
+          setFeedbackOutput(fetchProfileDataErrorTxt);
+          setHtmlTitle(errorTitle);
+        }
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsModalOpen(false);
+        }, 2000);
+      });
+  };
+
   const getAuthHeaders = () => {
     return {
       headers: {
@@ -52,25 +98,26 @@ export default function Profile() {
   };
 
   const signUserIn = (): void => {
+    let userFetched = false;
     axios
       .get(`${usersApiEndpoint}${userId}`, getAuthHeaders())
       .then((response) => {
-        const resPayload = response.data.data;
-        console.log(resPayload);
-        if (resPayload == null) {
-          setFeedbackOutput(errorOutput);
-          setHtmlTitle(errorTitle);
-        } else {
+        userFetched = response.status === 200;
+        if (userFetched) {
+          const resPayload = response.data.data;
           setHtmlTitle(resPayload.email);
           setUserData(resPayload);
         }
       })
       .catch((err) => {
-        setFeedbackOutput(errorOutput);
-        setHtmlTitle(errorTitle);
-        deletePersistedUserData();
+        console.error("ERROR ON FETCHING USER PROFILE", err);
       })
       .finally(() => {
+        if (!userFetched) {
+          setFeedbackOutput(fetchProfileDataErrorTxt);
+          setHtmlTitle(errorTitle);
+          deletePersistedUserData();
+        }
         setIsLoading(false);
       });
   };
@@ -83,19 +130,18 @@ export default function Profile() {
     updatedUserData: UserProfileDataInterface
   ): void => {
     setIsModalOpen(true);
+    let userUpdated = false;
     axios
       .put(`${usersApiEndpoint}${userId}`, updatedUserData, getAuthHeaders())
       .then((response) => {
-        console.info("UPDATE USER", response.data);
-        const resPayload = response.data.data;
-        if (resPayload == null) {
-          setHtmlTitle(errorTitle);
-          setFeedbackOutput(
-            "Sorry, we could not verify your profile, please try again later..."
-          );
-        } else {
-          let feedbackText = "Your profile has been updated !";
-          if (updatedUserData.email !== userData?.email) {
+        userUpdated = response.status === 200;
+        if (userUpdated) {
+          const resPayload = response.data.data;
+          let feedbackText = profileUpdatedText;
+          if (
+            updatedUserData.email !== userData?.email ||
+            (updatedUserData.password ?? "" != "")
+          ) {
             feedbackText =
               "Your profile has been updated ! some email confirmation may be required";
           }
@@ -108,58 +154,14 @@ export default function Profile() {
         }
       })
       .catch((err) => {
-        console.error(err);
-        setModalText(
-          "Sorry, we could not update your profile, please try again later..."
-        );
-        setFeedbackOutput(errorOutput);
-        setHtmlTitle(errorTitle);
+        console.error("ERROR ON UPDATING USER PROFILE", err);
       })
       .finally(() => {
-        setIsLoading(false);
-        setTimeout(() => {
-          setIsModalOpen(false);
-        }, 2000);
-      });
-  };
-
-  // the "verification" in question as a confirmation of some sensitive data change, this happens via email link
-  const verifyUserProfile = (
-    urlUserId: string,
-    urlEmail: string,
-    urlToken: string,
-    modtype: "veriftoken" | "modifytoken"
-  ): void => {
-    setIsModalOpen(true);
-    axios
-      .put(`${usersApiEndpoint}${urlUserId}/process-token`, {
-        email: urlEmail,
-        [modtype]: urlToken,
-      })
-      .then((response) => {
-        const resPayload = response.data.data;
-        if (resPayload == null) {
+        if (!userUpdated) {
+          setModalText(couldNotUpdateProfileDataTxt);
+          setFeedbackOutput(fetchProfileDataErrorTxt);
           setHtmlTitle(errorTitle);
-          setFeedbackOutput(errorOutput);
-        } else {
-          setModalText("Your profile has been updated !");
-          persistUserCredentials(resPayload.token, resPayload.user.id);
-          setHtmlTitle(resPayload.user.email);
-          setFeedbackOutput(loadingOutput);
-          setUserAuthToken(resPayload.token);
-          setUserId(urlUserId);
-          setUserData(resPayload.user);
         }
-      })
-      .catch((err) => {
-        console.error("ERROR ON VERIFY", err);
-        setModalText(
-          "Sorry, we could not update your profile, please try again later..."
-        );
-        setFeedbackOutput(errorOutput);
-        setHtmlTitle(errorTitle);
-      })
-      .finally(() => {
         setIsLoading(false);
         setTimeout(() => {
           setIsModalOpen(false);
@@ -201,7 +203,7 @@ export default function Profile() {
       urlUserId != null &&
       /^\d+$/.test(urlUserId)
     ) {
-      verifyUserProfile(urlUserId, urlEmail, urlToken, modType);
+      confirmUserProfileModToken(urlUserId, urlEmail, urlToken, modType);
     }
   }, [router.query]);
 
@@ -211,7 +213,7 @@ export default function Profile() {
       signUserIn();
     } else if (!userData) {
       setHtmlTitle(errorTitle);
-      setFeedbackOutput(errorOutput);
+      setFeedbackOutput(fetchProfileDataErrorTxt);
       setIsLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
