@@ -21,17 +21,15 @@ export async function getStaticPaths() {
 // getting post data for a specific slug to generate the blog post page
 export async function getStaticProps({ params }: any) {
   const postData = await getPostData(params.slug);
-  const processedPostContents = (
+  const postProcessedContents = (
     await remark().use(html).process(postData.contents)
   )
     .toString()
-    // removing target="_blank" from links of the TOC
-    .replace(/<a href="#/g, '<a class="toc-links" href="')
     // adding target="_blank" to all content links
     .replace(/<a href="/g, '<a class="content-links" target="_blank" href="');
   const processedPostData = {
     ...postData,
-    contents: processedPostContents,
+    contents: postProcessedContents,
   };
   return {
     props: {

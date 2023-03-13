@@ -58,8 +58,7 @@ export default function Home({
       <section className={utilStyles.headingMd}>
         <p>{`👋 I'm Yacine, and I'm a generalist web developer who is driven by
           curiosity, positivity, and a can-do attitude; I like to design full
-          stack solutions with various technologies, my objective is to have fun
-          while solving problems with code! Welcome to my personal website...`}</p>
+          stack solutions with various technologies, my objective is to learn and to solve problems with code. Welcome to my personal website, in which I talk about technical stuff mostly, and also whatever comes across my mind !`}</p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.paddingTop}`}>
         {list.length > 0 && (
