@@ -102,6 +102,7 @@ export default function Profile() {
 
   const deleteUserProfile = (): void => {
     setIsModalOpen(true);
+    setModalText(loadingOutput);
     let userDeleted = false;
     axios
       .delete(`${usersApiEndpoint}${userId}`, getAuthHeaders())
@@ -177,6 +178,7 @@ export default function Profile() {
     updatedUserData: UserProfileDataInterface
   ): void => {
     setIsModalOpen(true);
+    setModalText(loadingOutput);
     let userUpdated = false;
     axios
       .put(`${usersApiEndpoint}${userId}`, updatedUserData, getAuthHeaders())
