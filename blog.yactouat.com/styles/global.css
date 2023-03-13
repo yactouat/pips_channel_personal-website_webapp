@@ -26,7 +26,8 @@ body {
   margin-right: 4px;
   cursor: pointer;
 }
-input[type="submit"] {
+input[type="submit"],
+button {
   cursor: pointer;
 }
 

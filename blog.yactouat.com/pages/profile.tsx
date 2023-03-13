@@ -36,9 +36,7 @@ export default function Profile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackOutput, setFeedbackOutput] = useState(loadingOutput);
-  const [modalText, setModalText] = useState(
-    "Please wait while we are checking your profile..."
-  );
+  const [modalText, setModalText] = useState("Loading...");
 
   const [userAuthToken, setUserAuthToken] = useState<null | string>(null);
   const [userData, setUserData] = useState<null | UserProfileDataInterface>(
@@ -52,7 +50,7 @@ export default function Profile() {
     urlUserId: string,
     urlEmail: string,
     urlToken: string,
-    modtype: "veriftoken" | "modifytoken"
+    modtype: "veriftoken" | "modifytoken" | "deletetoken"
   ): void => {
     setIsModalOpen(true);
     let userProfileModConfirmed = false;
@@ -76,14 +74,54 @@ export default function Profile() {
             resPayload.user.hasPendingModifications
           );
         }
+        if (response.status === 204) {
+          setModalText("Your user profile has been deleted...");
+          deletePersistedUserData();
+          setHtmlTitle("...profile deleted");
+          setFeedbackOutput(loadingOutput);
+          setUserAuthToken(null);
+          setUserData(null);
+          userProfileModConfirmed = true;
+        }
       })
       .catch((err) => {
-        console.error("ERROR ON CONFIRMING USED PROFILE MOD", err);
+        console.error("ERROR ON CONFIRMING USER PROFILE MOD", err);
       })
       .finally(() => {
         if (!userProfileModConfirmed) {
           setModalText(couldNotUpdateProfileDataTxt);
           setFeedbackOutput(fetchProfileDataErrorTxt);
+          setHtmlTitle(errorTitle);
+        }
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsModalOpen(false);
+        }, 2000);
+      });
+  };
+
+  const deleteUserProfile = (): void => {
+    setIsModalOpen(true);
+    let userDeleted = false;
+    axios
+      .delete(`${usersApiEndpoint}${userId}`, getAuthHeaders())
+      .then((response) => {
+        userDeleted = response.status === 200;
+        if (userDeleted) {
+          setModalText(
+            "Your profile deletion request has been sent, please confirm it via the link sent to your email address."
+          );
+          setUserHasPendingModifications(true);
+        }
+      })
+      .catch((err) => {
+        console.error("ERROR ON SENDING REQUEST TO DELETE USER PROFILE", err);
+      })
+      .finally(() => {
+        if (!userDeleted) {
+          setModalText(
+            "Sorry, we could not send the request to delete your profile data ..."
+          );
           setHtmlTitle(errorTitle);
         }
         setIsLoading(false);
@@ -190,20 +228,32 @@ export default function Profile() {
     let urlEmail;
     let urlToken;
     let urlUserId: string;
-    let modType: "veriftoken" | "modifytoken";
+    let modType: "veriftoken" | "modifytoken" | "deletetoken";
     if (process.env.NODE_ENV === "development") {
       const queryStrings = new URL(window.location.href).searchParams;
-      urlToken = queryStrings.get("veriftoken")
-        ? (queryStrings.get("veriftoken") as string)
-        : (queryStrings.get("modifytoken") as string);
-      modType = queryStrings.get("veriftoken") ? "veriftoken" : "modifytoken";
+      urlToken =
+        (queryStrings.get("veriftoken") as string) ??
+        (queryStrings.get("modifytoken") as string) ??
+        (queryStrings.get("deletetoken") as string) ??
+        "";
+      modType = queryStrings.get("veriftoken")
+        ? "veriftoken"
+        : queryStrings.get("modifytoken")
+        ? "modifytoken"
+        : "deletetoken";
       urlEmail = queryStrings.get("email") as string;
       urlUserId = queryStrings.get("userid") as string;
     } else {
-      urlToken = router.query.veriftoken
-        ? (router.query.veriftoken as string)
-        : (router.query.modifytoken as string);
-      modType = router.query.veriftoken ? "veriftoken" : "modifytoken";
+      urlToken =
+        (router.query.veriftoken as string) ??
+        (router.query.modifytoken as string) ??
+        (router.query.deletetoken as string) ??
+        "";
+      modType = router.query.veriftoken
+        ? "veriftoken"
+        : router.query.modifytoken
+        ? "modifytoken"
+        : "deletetoken";
       urlEmail = router.query.email as string;
       urlUserId = router.query.userid as string;
     }
@@ -247,6 +297,7 @@ export default function Profile() {
 
       {!isLoading && userData != null && isEditMode && (
         <EditProfileData
+          deleteUserProfile={deleteUserProfile}
           toggleEditMode={toggleEditMode}
           updateUserProfile={updateUserProfile}
           userData={userData}

@@ -8,9 +8,15 @@
   color: #666;
 }
 
-/* display */
+/* display, visibility, opacity, overlays etc. */
+.displayNone {
+  display: none;
+}
 .flex {
   display: flex;
+}
+.spaceBetween {
+  justify-content: space-between;
 }
 
 /* headings, sorted desc */
@@ -79,9 +85,4 @@
 .smallerText {
   font-size: 0.8rem;
   line-height: 1;
-}
-
-/* visibility, display, opacity, overlays etc. */
-.displayNone {
-  display: none;
 }
