@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, MouseEventHandler, useState } from "react";
 import { SocialHandleType } from "pips_resources_definitions/dist/types";
 import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 
@@ -27,7 +27,7 @@ const EditProfileData = ({
     userData.socialhandletype
   );
 
-  const handleDelete = (e: MouseEvent) => {
+  const handleDelete: MouseEventHandler = (e) => {
     e.preventDefault();
     deleteUserProfile();
   };
