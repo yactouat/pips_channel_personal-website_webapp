@@ -1,15 +1,18 @@
-import styles from "./profile-data.module.css";
-import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
 import { FormEventHandler, useState } from "react";
-import utilStyles from "@/styles/utils.module.css";
 import { SocialHandleType } from "pips_resources_definitions/dist/types";
+import UserProfileDataInterface from "@/lib/interfaces/UserDataInterface";
+
+import styles from "./profile-data.module.css";
+import utilStyles from "@/styles/utils.module.css";
 
 const EditProfileData = ({
+  deleteUserProfile,
   toggleEditMode,
   updateUserProfile,
   userData,
   userHasPendingModifications,
 }: {
+  deleteUserProfile: () => void;
   toggleEditMode: () => void;
   updateUserProfile: (updatedUserData: UserProfileDataInterface) => void;
   userData: UserProfileDataInterface;
@@ -23,6 +26,11 @@ const EditProfileData = ({
   const [userSocialHandleType, setUserSocialHandleType] = useState(
     userData.socialhandletype
   );
+
+  const handleDelete = (e: MouseEvent) => {
+    e.preventDefault();
+    deleteUserProfile();
+  };
 
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -104,11 +112,19 @@ const EditProfileData = ({
           uppercase letter and 1 lowercase letter
         </p>
 
-        <input
-          type="submit"
-          value="save"
-          className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottomX2} ${utilStyles.marginTopX2}`}
-        />
+        <div className={`${utilStyles.flex} ${utilStyles.spaceBetween}`}>
+          <input
+            type="submit"
+            value="save"
+            className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottomX2} ${utilStyles.marginTopX2}`}
+          />
+          <button
+            className={`${utilStyles.padding} ${utilStyles.largerText} ${utilStyles.marginBottomX2} ${utilStyles.marginTopX2} ${styles.deleteProfileBtn}`}
+            onClick={(e) => handleDelete(e)}
+          >
+            delete profile
+          </button>
+        </div>
       </form>
 
       <hr />
@@ -117,7 +133,7 @@ const EditProfileData = ({
         <>
           <p>
             ⚠️ your profile has pending modifications that require to be
-            confirmed by email
+            confirmed via an email sent to your inbox
           </p>
 
           <hr />
